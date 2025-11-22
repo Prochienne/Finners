@@ -6,16 +6,46 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class HomeActivity extends AppCompatActivity {
 
+    private String userName;
+    private String userEmail;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        String userName = getIntent().getStringExtra("USER_NAME");
-        TextView welcomeText = findViewById(R.id.tvWelcomeHome);
+        userName = getIntent().getStringExtra("USER_NAME");
+        userEmail = getIntent().getStringExtra("USER_EMAIL");
 
-        if (userName != null) {
-            welcomeText.setText("Welcome to Finners, " + userName + "!");
+        // Load default fragment
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, GroupsFragment.newInstance(userName))
+                    .commit();
         }
+
+        findViewById(R.id.nav_groups).setOnClickListener(v -> {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, GroupsFragment.newInstance(userName))
+                    .commit();
+        });
+
+        findViewById(R.id.nav_friends).setOnClickListener(v -> {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new FriendsFragment())
+                    .commit();
+        });
+
+        findViewById(R.id.nav_activity).setOnClickListener(v -> {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new ActivityFragment())
+                    .commit();
+        });
+
+        findViewById(R.id.nav_account).setOnClickListener(v -> {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, AccountFragment.newInstance(userName, userEmail))
+                    .commit();
+        });
     }
 }

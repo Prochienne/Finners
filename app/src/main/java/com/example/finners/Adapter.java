@@ -9,13 +9,16 @@ import androidx.recyclerview.widget.RecyclerView;
 public class Adapter extends RecyclerView.Adapter<Adapter.IntroViewHolder> {
 
     private String userName;
+    private String userEmail;
 
-    public Adapter(String userName) {
+    public Adapter(String userName, String userEmail) {
         this.userName = userName;
+        this.userEmail = userEmail;
     }
 
     public Adapter() {
         this.userName = "User";
+        this.userEmail = "user@example.com";
     }
 
     @NonNull
@@ -46,6 +49,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.IntroViewHolder> {
                 skipSetup.setOnClickListener(v -> {
                     android.content.Intent intent = new android.content.Intent(v.getContext(), HomeActivity.class);
                     intent.putExtra("USER_NAME", userName);
+                    intent.putExtra("USER_EMAIL", userEmail);
                     v.getContext().startActivity(intent);
                 });
             }

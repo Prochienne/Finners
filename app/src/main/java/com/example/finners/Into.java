@@ -15,12 +15,12 @@ public class Into extends AppCompatActivity {
 
         setContentView(R.layout.intro);
 
-
         ViewPager2 viewPager = findViewById(R.id.viewPager);
         TabLayout tabLayout = findViewById(R.id.tabLayout);
 
         String userName = getIntent().getStringExtra("USER_NAME");
-        Adapter adapter = new Adapter(userName);
+        String userEmail = getIntent().getStringExtra("USER_EMAIL");
+        Adapter adapter = new Adapter(userName, userEmail);
         viewPager.setAdapter(adapter);
 
         new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {

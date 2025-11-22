@@ -89,6 +89,7 @@ public class Signup extends AppCompatActivity {
                                     public void onClick(View v) {
                                         Intent i = new Intent(Signup.this, Into.class);
                                         i.putExtra("USER_NAME", name.getText().toString());
+                                        i.putExtra("USER_EMAIL", ((EditText)findViewById(R.id.email)).getText().toString());
                                         startActivity(i);
                                     }
                                 });
