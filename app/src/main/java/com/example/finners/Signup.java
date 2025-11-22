@@ -87,7 +87,8 @@ public class Signup extends AppCompatActivity {
         done.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                        Toast.makeText(Signup.this, "done", Toast.LENGTH_SHORT).show();
+                                        Intent i = new Intent(Signup.this, Into.class);
+                                        startActivity(i);
                                     }
                                 });
         ImageButton back=findViewById(R.id.back);

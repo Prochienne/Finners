@@ -58,6 +58,7 @@
 
     </LinearLayout>
 
+
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/email"
         android:layout_width="353dp"

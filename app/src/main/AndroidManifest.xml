@@ -12,6 +12,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Finners">
         <activity
+            android:name=".intro"
+            android:exported="false"
+            android:theme="@style/Theme.Finners" />
+        <activity
             android:name=".Signup"
             android:exported="false" />
         <activity
@@ -23,6 +27,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".Into" />
     </application>
 
 </manifest>
