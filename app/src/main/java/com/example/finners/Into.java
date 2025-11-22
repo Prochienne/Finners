@@ -19,11 +19,12 @@ public class Into extends AppCompatActivity {
         ViewPager2 viewPager = findViewById(R.id.viewPager);
         TabLayout tabLayout = findViewById(R.id.tabLayout);
 
-        Adapter adapter = new Adapter();
+        String userName = getIntent().getStringExtra("USER_NAME");
+        Adapter adapter = new Adapter(userName);
         viewPager.setAdapter(adapter);
 
         new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {
-            tab.setIcon(R.drawable.selector_dot);
+            tab.setIcon(R.drawable.dots_selector);
         }).attach();
     }
 }

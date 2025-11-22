@@ -88,6 +88,7 @@ public class Signup extends AppCompatActivity {
                                     @Override
                                     public void onClick(View v) {
                                         Intent i = new Intent(Signup.this, Into.class);
+                                        i.putExtra("USER_NAME", name.getText().toString());
                                         startActivity(i);
                                     }
                                 });

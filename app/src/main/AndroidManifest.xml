@@ -28,6 +28,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".Into" />
+        <activity android:name=".HomeActivity" />
     </application>
 
 </manifest>

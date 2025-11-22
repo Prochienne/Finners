@@ -6,7 +6,7 @@
     </style>
 
     <style name="Theme.Finners" parent="Base.Theme.Finners" />
-    <style name="MyDotTabs" parent="Widget.Material3.TabLayout">
+    <style name="MyDotTabs" parent="Widget.MaterialComponents.TabLayout">
         <item name="tabIndicatorColor">@android:color/transparent</item>
         <item name="tabIndicatorHeight">0dp</item>
         <item name="tabIconTint">@null</item>
