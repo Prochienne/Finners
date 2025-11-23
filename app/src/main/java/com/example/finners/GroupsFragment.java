@@ -48,16 +48,64 @@ public class GroupsFragment extends Fragment {
             welcomeText.setText("Welcome to Finners, " + userName + "!");
         }
 
-        view.findViewById(R.id.btnAddHousehold).setOnClickListener(v -> {
+        view.findViewById(R.id.btnStartNewGroup).setOnClickListener(v -> {
             android.content.Intent intent = new android.content.Intent(getActivity(), CreateGroupActivity.class);
-            intent.putExtra("GROUP_TYPE", "Home");
             startActivity(intent);
         });
 
-        view.findViewById(R.id.btnAddTrip).setOnClickListener(v -> {
-            android.content.Intent intent = new android.content.Intent(getActivity(), CreateGroupActivity.class);
-            intent.putExtra("GROUP_TYPE", "Trip");
-            startActivity(intent);
+        view.findViewById(R.id.btnAddExpense).setOnClickListener(v -> {
+            android.widget.Toast.makeText(requireContext(), "Add expense clicked", android.widget.Toast.LENGTH_SHORT).show();
         });
+        
+        loadGroups(view);
+    }
+    
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (getView() != null) {
+            loadGroups(getView());
+        }
+    }
+    
+    private void loadGroups(View view) {
+        android.content.SharedPreferences prefs = requireActivity().getSharedPreferences("FinnerPrefs", android.content.Context.MODE_PRIVATE);
+        java.util.Set<String> groups = prefs.getStringSet("groups", new java.util.HashSet<>());
+        
+        TextView tvEmptyState = view.findViewById(R.id.tvEmptyState);
+        View scrollViewGroups = view.findViewById(R.id.scrollViewGroups);
+        android.widget.LinearLayout layoutGroups = view.findViewById(R.id.layoutGroups);
+        
+        // Clear existing buttons
+        layoutGroups.removeAllViews();
+        
+        if (groups.isEmpty()) {
+            // Show empty state
+            tvEmptyState.setVisibility(View.VISIBLE);
+            scrollViewGroups.setVisibility(View.GONE);
+        } else {
+            // Hide empty state and show groups
+            tvEmptyState.setVisibility(View.GONE);
+            scrollViewGroups.setVisibility(View.VISIBLE);
+            
+            // Create button for each group
+            for (String groupName : groups) {
+                android.widget.Button groupButton = new android.widget.Button(requireContext());
+                android.widget.LinearLayout.LayoutParams params = new android.widget.LinearLayout.LayoutParams(
+                    android.widget.LinearLayout.LayoutParams.MATCH_PARENT,
+                    android.widget.LinearLayout.LayoutParams.WRAP_CONTENT
+                );
+                params.setMargins(0, 0, 0, 16);
+                groupButton.setLayoutParams(params);
+                groupButton.setText(groupName);
+                groupButton.setTextSize(16);
+                groupButton.setOnClickListener(v -> {
+                    android.content.Intent intent = new android.content.Intent(requireContext(), GroupDetailsActivity.class);
+                    intent.putExtra("GROUP_NAME", groupName);
+                    startActivity(intent);
+                });
+                layoutGroups.addView(groupButton);
+            }
+        }
     }
 }

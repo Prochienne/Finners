@@ -1,6 +1,6 @@
 package com.example.finners;
 
-public class Contact {
+public class Contact implements java.io.Serializable {
     private String id;
     private String name;
     private String phoneNumber;

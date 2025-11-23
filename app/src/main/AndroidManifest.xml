@@ -15,11 +15,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Finners">
         <activity
-            android:name=".intro"
+            android:name=".Into"
             android:exported="false"
             android:theme="@style/Theme.Finners" />
         <activity
             android:name=".Signup"
+            android:exported="false" />
+        <activity
+            android:name=".LoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".HomeActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
@@ -30,12 +36,30 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Into" />
-        <activity android:name=".HomeActivity" />
-        <activity android:name=".CreateGroupActivity" />
-        <activity android:name=".AddFriendsActivity" />
-        <activity android:name=".ScanCodeActivity" />
-        <activity android:name=".LoginActivity" />
+        <activity
+            android:name=".GroupSettingsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CreateGroupActivity"
+            android:exported="false" />
+        <activity
+            android:name=".GroupDetailsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AddFriendsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ReviewActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ScanCodeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".FriendDetailsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".FriendSettingsActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

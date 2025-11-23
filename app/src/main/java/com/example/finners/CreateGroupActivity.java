@@ -10,8 +10,14 @@ import android.widget.Toast;
 import android.widget.Switch;
 import android.widget.LinearLayout;
 import android.app.DatePickerDialog;
+import android.content.SharedPreferences;
 import java.util.Calendar;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import androidx.appcompat.app.AppCompatActivity;
+import org.json.JSONArray;
+import org.json.JSONException;
 
 public class CreateGroupActivity extends AppCompatActivity {
 
@@ -52,7 +58,8 @@ public class CreateGroupActivity extends AppCompatActivity {
                 Toast.makeText(this, "Please select a group type", Toast.LENGTH_SHORT).show();
                 return;
             }
-            // TODO: Save group logic here
+            // Save group to SharedPreferences
+            saveGroup(groupName);
             Toast.makeText(this, "Group '" + groupName + "' created!", Toast.LENGTH_SHORT).show();
             finish();
         });
@@ -114,5 +121,36 @@ public class CreateGroupActivity extends AppCompatActivity {
         btnTypeHome.setSelected(false);
         btnTypeCouple.setSelected(false);
         btnTypeOther.setSelected(false);
+    }
+
+    private void saveGroup(String groupName) {
+        SharedPreferences prefs = getSharedPreferences("FinnerPrefs", MODE_PRIVATE);
+        Set<String> groups = prefs.getStringSet("groups", new HashSet<>());
+        
+        // Create a new HashSet because the one from getStringSet might be immutable
+        Set<String> updatedGroups = new HashSet<>(groups);
+        updatedGroups.add(groupName);
+        
+        prefs.edit().putStringSet("groups", updatedGroups).apply();
+        
+        // Save activity log
+        saveActivityLog("You created the group \"" + groupName + "\".");
+    }
+
+    private void saveActivityLog(String message) {
+        SharedPreferences prefs = getSharedPreferences("FinnerPrefs", MODE_PRIVATE);
+        String logsJson = prefs.getString("activity_logs", "[]");
+        try {
+            JSONArray jsonArray = new JSONArray(logsJson);
+            // Add new message at the beginning
+            JSONArray newJsonArray = new JSONArray();
+            newJsonArray.put(message);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                newJsonArray.put(jsonArray.get(i));
+            }
+            prefs.edit().putString("activity_logs", newJsonArray.toString()).apply();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -43,6 +43,11 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
         return contacts.size();
     }
 
+    public void filterList(List<Contact> filteredList) {
+        contacts = filteredList;
+        notifyDataSetChanged();
+    }
+
     static class ContactViewHolder extends RecyclerView.ViewHolder {
         TextView name;
         TextView details;

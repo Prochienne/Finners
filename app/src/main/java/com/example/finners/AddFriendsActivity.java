@@ -41,6 +41,18 @@ public class AddFriendsActivity extends AppCompatActivity {
 
         btnBack.setOnClickListener(v -> finish());
 
+        findViewById(R.id.btnNext).setOnClickListener(v -> {
+            ArrayList<Contact> selectedContacts = new ArrayList<>();
+            for (Contact contact : contactList) {
+                if (contact.isSelected()) {
+                    selectedContacts.add(contact);
+                }
+            }
+            android.content.Intent intent = new android.content.Intent(AddFriendsActivity.this, ReviewActivity.class);
+            intent.putExtra("selected_contacts", selectedContacts);
+            startActivity(intent);
+        });
+
         rvContacts.setLayoutManager(new LinearLayoutManager(this));
         contactList = new ArrayList<>();
         adapter = new ContactsAdapter(contactList, this::onContactClick);
@@ -53,6 +65,30 @@ public class AddFriendsActivity extends AppCompatActivity {
         } else {
             loadContacts();
         }
+
+        android.widget.EditText etSearchFriend = findViewById(R.id.etSearchFriend);
+        etSearchFriend.addTextChangedListener(new android.text.TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(android.text.Editable s) {
+                filter(s.toString());
+            }
+        });
+    }
+
+    private void filter(String text) {
+        List<Contact> filteredList = new ArrayList<>();
+        for (Contact item : contactList) {
+            if (item.getName().toLowerCase().contains(text.toLowerCase())) {
+                filteredList.add(item);
+            }
+        }
+        adapter.filterList(filteredList);
     }
 
     private void loadContacts() {
@@ -112,7 +148,9 @@ public class AddFriendsActivity extends AppCompatActivity {
     }
 
     private void updateSelectedContactsVisibility() {
-        hsvSelectedContacts.setVisibility(layoutSelectedContacts.getChildCount() > 0 ? View.VISIBLE : View.GONE);
+        boolean hasSelected = layoutSelectedContacts.getChildCount() > 0;
+        hsvSelectedContacts.setVisibility(hasSelected ? View.VISIBLE : View.GONE);
+        findViewById(R.id.btnNext).setVisibility(hasSelected ? View.VISIBLE : View.GONE);
     }
 
     @Override

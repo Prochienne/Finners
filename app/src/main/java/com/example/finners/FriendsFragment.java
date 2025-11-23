@@ -21,11 +21,50 @@ public class FriendsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_friends, container, false);
 
         Button btnAddFriends = view.findViewById(R.id.btnAddFriends);
+        androidx.recyclerview.widget.RecyclerView rvFriends = view.findViewById(R.id.rvFriends);
+        android.widget.TextView tvFriendsEmpty = view.findViewById(R.id.tvFriendsEmpty);
+
         btnAddFriends.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), AddFriendsActivity.class);
             startActivity(intent);
         });
 
+        FriendsRepository repository = FriendsRepository.getInstance();
+        java.util.List<Contact> friends = repository.getFriends();
+
+        if (friends.isEmpty()) {
+            rvFriends.setVisibility(View.GONE);
+            tvFriendsEmpty.setVisibility(View.VISIBLE);
+        } else {
+            rvFriends.setVisibility(View.VISIBLE);
+            tvFriendsEmpty.setVisibility(View.GONE);
+            rvFriends.setLayoutManager(new androidx.recyclerview.widget.LinearLayoutManager(getContext()));
+            rvFriends.setAdapter(new FriendsAdapter(friends));
+        }
+
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Refresh list on resume
+        View view = getView();
+        if (view != null) {
+            androidx.recyclerview.widget.RecyclerView rvFriends = view.findViewById(R.id.rvFriends);
+            android.widget.TextView tvFriendsEmpty = view.findViewById(R.id.tvFriendsEmpty);
+            FriendsRepository repository = FriendsRepository.getInstance();
+            java.util.List<Contact> friends = repository.getFriends();
+
+            if (friends.isEmpty()) {
+                rvFriends.setVisibility(View.GONE);
+                tvFriendsEmpty.setVisibility(View.VISIBLE);
+            } else {
+                rvFriends.setVisibility(View.VISIBLE);
+                tvFriendsEmpty.setVisibility(View.GONE);
+                rvFriends.setLayoutManager(new androidx.recyclerview.widget.LinearLayoutManager(getContext()));
+                rvFriends.setAdapter(new FriendsAdapter(friends));
+            }
+        }
     }
 }
