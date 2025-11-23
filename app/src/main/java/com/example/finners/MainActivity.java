@@ -2,7 +2,6 @@ package com.example.finners;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Toast;
 import android.widget.Button;
 import android.view.View;
 
@@ -18,14 +17,19 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+        
         Button signup = findViewById(R.id.signup);
-        signup.setOnClickListener(new View.OnClickListener() {
-            @Override
-                    public void onClick(View v) {
-                        Intent i = new Intent(MainActivity.this, Signup.class);
-                        startActivity(i);
-            }
+        signup.setOnClickListener(v -> {
+            Intent i = new Intent(MainActivity.this, Signup.class);
+            startActivity(i);
         });
+
+        Button login = findViewById(R.id.login);
+        login.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(intent);
+        });
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);

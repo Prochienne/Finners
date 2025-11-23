@@ -48,6 +48,7 @@ public class AccountFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         TextView nameText = view.findViewById(R.id.tvUserName);
         TextView emailText = view.findViewById(R.id.tvUserEmail);
+        View btnScanCode = view.findViewById(R.id.btnScanCode);
 
         if (userName != null) {
             nameText.setText(userName);
@@ -55,5 +56,10 @@ public class AccountFragment extends Fragment {
         if (userEmail != null) {
             emailText.setText(userEmail);
         }
+
+        btnScanCode.setOnClickListener(v -> {
+            android.content.Intent intent = new android.content.Intent(getActivity(), ScanCodeActivity.class);
+            startActivity(intent);
+        });
     }
 }

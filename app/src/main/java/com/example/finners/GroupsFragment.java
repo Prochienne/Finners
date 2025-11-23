@@ -47,5 +47,17 @@ public class GroupsFragment extends Fragment {
         if (userName != null) {
             welcomeText.setText("Welcome to Finners, " + userName + "!");
         }
+
+        view.findViewById(R.id.btnAddHousehold).setOnClickListener(v -> {
+            android.content.Intent intent = new android.content.Intent(getActivity(), CreateGroupActivity.class);
+            intent.putExtra("GROUP_TYPE", "Home");
+            startActivity(intent);
+        });
+
+        view.findViewById(R.id.btnAddTrip).setOnClickListener(v -> {
+            android.content.Intent intent = new android.content.Intent(getActivity(), CreateGroupActivity.class);
+            intent.putExtra("GROUP_TYPE", "Trip");
+            startActivity(intent);
+        });
     }
 }

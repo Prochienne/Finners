@@ -53,6 +53,14 @@ public class Adapter extends RecyclerView.Adapter<Adapter.IntroViewHolder> {
                     v.getContext().startActivity(intent);
                 });
             }
+            
+            View addGroup = holder.itemView.findViewById(R.id.btnAddGroup);
+            if (addGroup != null) {
+                addGroup.setOnClickListener(v -> {
+                    android.content.Intent intent = new android.content.Intent(v.getContext(), CreateGroupActivity.class);
+                    v.getContext().startActivity(intent);
+                });
+            }
         }
     }
 
