@@ -58,6 +58,16 @@ public class Adapter extends RecyclerView.Adapter<Adapter.IntroViewHolder> {
             if (addGroup != null) {
                 addGroup.setOnClickListener(v -> {
                     android.content.Intent intent = new android.content.Intent(v.getContext(), CreateGroupActivity.class);
+                    intent.putExtra("GROUP_TYPE", "Trip");
+                    v.getContext().startActivity(intent);
+                });
+            }
+
+            View addHousehold = holder.itemView.findViewById(R.id.btnAddHousehold);
+            if (addHousehold != null) {
+                addHousehold.setOnClickListener(v -> {
+                    android.content.Intent intent = new android.content.Intent(v.getContext(), CreateGroupActivity.class);
+                    intent.putExtra("GROUP_TYPE", "Home");
                     v.getContext().startActivity(intent);
                 });
             }

@@ -39,7 +39,7 @@
         android:layout_marginBottom="20dp"
         android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@+id/tvWelcomeHome"
-        app:layout_constraintBottom_toTopOf="@+id/btnStartNewGroup"
+        app:layout_constraintBottom_toTopOf="@+id/btnNonGroupExpenses"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
@@ -53,11 +53,23 @@
     </ScrollView>
 
     <Button
+        android:id="@+id/btnNonGroupExpenses"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:text="Non-group expenses"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        app:layout_constraintBottom_toTopOf="@+id/btnStartNewGroup"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
         android:id="@+id/btnStartNewGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="360dp"
+        android:layout_marginBottom="100dp"
         android:text="Start a new group"
+        style="@style/Widget.AppCompat.Button.Colored"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

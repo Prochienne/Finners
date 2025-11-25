@@ -90,12 +90,17 @@ public class CreateGroupActivity extends AppCompatActivity {
         etStartDate.setOnClickListener(v -> showDatePicker(etStartDate));
         etEndDate.setOnClickListener(v -> showDatePicker(etEndDate));
 
+        // Handle Intent Extras for Pre-selection
         String intentGroupType = getIntent().getStringExtra("GROUP_TYPE");
         if (intentGroupType != null) {
-            if (intentGroupType.equals("Trip")) {
+            if (intentGroupType.equalsIgnoreCase("Trip")) {
                 btnTypeTrip.performClick();
-            } else if (intentGroupType.equals("Home")) {
+            } else if (intentGroupType.equalsIgnoreCase("Home")) {
                 btnTypeHome.performClick();
+            } else if (intentGroupType.equalsIgnoreCase("Couple")) {
+                btnTypeCouple.performClick();
+            } else if (intentGroupType.equalsIgnoreCase("Other")) {
+                btnTypeOther.performClick();
             }
         }
     }

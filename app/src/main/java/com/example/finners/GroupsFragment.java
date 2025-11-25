@@ -58,6 +58,12 @@ public class GroupsFragment extends Fragment {
             startActivity(intent);
         });
         
+        view.findViewById(R.id.btnNonGroupExpenses).setOnClickListener(v -> {
+            // Navigate to non-group expenses or show a toast for now
+            // Assuming it might just filter expenses or show a specific list
+             android.widget.Toast.makeText(getContext(), "Non-group expenses clicked", android.widget.Toast.LENGTH_SHORT).show();
+        });
+        
         loadGroups(view);
     }
     
