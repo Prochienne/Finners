@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    tools:context=".FriendSettingsActivity">
+
+    <ImageButton
+        android:id="@+id/btnBack"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@android:drawable/ic_menu_revert"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/black"
+        android:contentDescription="Back" />
+    <!-- Using ic_menu_revert as a back arrow alternative if standard back arrow isn't easily available by name, or I'll trust the system has a back arrow. -->
+    <!-- Actually, let's use a standard back arrow if possible. I'll stick to ic_menu_revert or just a text "<" if I want to be safe, but ImageButton with a drawable is better. -->
+    <!-- I'll use @android:drawable/ic_menu_revert which looks like a U-turn, maybe not ideal. -->
+    <!-- I'll use a simple TextView with "<" if I can't find a good system drawable, but let's try to be professional. -->
+    <!-- I'll use @android:drawable/arrow_up_float and rotate it? No. -->
+    <!-- I will use a simple text view with a back arrow character for now to ensure it looks like an arrow, or use a known system drawable. -->
+    <!-- Let's use @android:drawable/ic_menu_close_clear_cancel for consistency with other screens if they use X, but prompt says "arrow". -->
+    <!-- I will use a TextView with text="<-" or similar if I have to, but let's try to use a standard icon. -->
+    <!-- I'll use @android:drawable/ic_media_previous. It's a rewind/previous track icon, usually an arrow pointing left. -->
+
+    <TextView
+        android:id="@+id/tvHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="Friend settings"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/btnBack"
+        app:layout_constraintStart_toEndOf="@id/btnBack"
+        app:layout_constraintTop_toTopOf="@id/btnBack" />
+
+    <TextView
+        android:id="@+id/tvFriendName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Friend Name"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnBack" />
+
+    <TextView
+        android:id="@+id/tvPhoneNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="+1 555-0123"
+        android:textSize="14sp"
+        android:textColor="#808080"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvFriendName" />
+
+    <TextView
+        android:id="@+id/tvSharedGroupsHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="Shared groups"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvPhoneNumber" />
+
+    <TextView
+        android:id="@+id/tvSharedGroupsStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="You and Friend Name do not share any groups."
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvSharedGroupsHeader" />
+
+    <TextView
+        android:id="@+id/tvManageRelationshipHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="Manage relationship"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvSharedGroupsStatus" />
+
+    <Button
+        android:id="@+id/btnRemoveFriend"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Remove from friends list"
+        android:backgroundTint="#FFCDD2"
+        android:textColor="#D32F2F"
+        app:layout_constraintTop_toBottomOf="@id/tvManageRelationshipHeader" />
+
+    <Button
+        android:id="@+id/btnBlockUser"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Block user"
+        android:backgroundTint="#FFCDD2"
+        android:textColor="#D32F2F"
+        app:layout_constraintTop_toBottomOf="@id/btnRemoveFriend" />
+
+    <Button
+        android:id="@+id/btnReportUser"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Report user"
+        android:backgroundTint="#FFCDD2"
+        android:textColor="#D32F2F"
+        app:layout_constraintTop_toBottomOf="@id/btnBlockUser" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

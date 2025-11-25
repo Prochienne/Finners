@@ -132,6 +132,14 @@ public class CreateGroupActivity extends AppCompatActivity {
         updatedGroups.add(groupName);
         
         prefs.edit().putStringSet("groups", updatedGroups).apply();
+
+        if ("Trip".equals(selectedType) && switchTripDates.isChecked()) {
+            String startDate = etStartDate.getText().toString();
+            String endDate = etEndDate.getText().toString();
+            if (!startDate.isEmpty() && !endDate.isEmpty()) {
+                prefs.edit().putString("group_dates_" + groupName, startDate + " - " + endDate).apply();
+            }
+        }
         
         // Save activity log
         saveActivityLog("You created the group \"" + groupName + "\".");
@@ -142,13 +150,9 @@ public class CreateGroupActivity extends AppCompatActivity {
         String logsJson = prefs.getString("activity_logs", "[]");
         try {
             JSONArray jsonArray = new JSONArray(logsJson);
-            // Add new message at the beginning
-            JSONArray newJsonArray = new JSONArray();
-            newJsonArray.put(message);
-            for (int i = 0; i < jsonArray.length(); i++) {
-                newJsonArray.put(jsonArray.get(i));
-            }
-            prefs.edit().putString("activity_logs", newJsonArray.toString()).apply();
+            // Add new message at the end
+            jsonArray.put(message);
+            prefs.edit().putString("activity_logs", jsonArray.toString()).apply();
         } catch (JSONException e) {
             e.printStackTrace();
         }

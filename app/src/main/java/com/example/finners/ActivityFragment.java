@@ -33,6 +33,11 @@ public class ActivityFragment extends Fragment {
         
         lvActivityLog = view.findViewById(R.id.lvActivityLog);
         tvActivityEmpty = view.findViewById(R.id.tvActivityEmpty);
+
+        view.findViewById(R.id.btnAddExpense).setOnClickListener(v -> {
+            android.content.Intent intent = new android.content.Intent(getActivity(), AddExpenseActivity.class);
+            startActivity(intent);
+        });
         
         return view;
     }
@@ -63,8 +68,39 @@ public class ActivityFragment extends Fragment {
         } else {
             tvActivityEmpty.setVisibility(View.GONE);
             lvActivityLog.setVisibility(View.VISIBLE);
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_list_item_1, logs);
+            ActivityLogAdapter adapter = new ActivityLogAdapter(requireContext(), logs);
             lvActivityLog.setAdapter(adapter);
+        }
+    }
+
+    private static class ActivityLogAdapter extends ArrayAdapter<String> {
+        public ActivityLogAdapter(Context context, List<String> logs) {
+            super(context, 0, logs);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            if (convertView == null) {
+                convertView = LayoutInflater.from(getContext()).inflate(android.R.layout.simple_list_item_2, parent, false);
+            }
+
+            String log = getItem(position);
+            TextView text1 = convertView.findViewById(android.R.id.text1);
+            TextView text2 = convertView.findViewById(android.R.id.text2);
+
+            if (log != null) {
+                if (log.contains("|")) {
+                    String[] parts = log.split("\\|", 2);
+                    text1.setText(parts[0]);
+                    text2.setText(parts[1]);
+                    text2.setVisibility(View.VISIBLE);
+                } else {
+                    text1.setText(log);
+                    text2.setVisibility(View.GONE);
+                }
+            }
+
+            return convertView;
         }
     }
 }

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    tools:context=".FriendDetailsActivity">
+
+    <ImageButton
+        android:id="@+id/btnBack"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@android:drawable/ic_menu_close_clear_cancel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/black"
+        android:contentDescription="Back" />
+    <!-- Using close icon as back/close for now, or arrow if preferred. Prompt says "arrow on top left". -->
+    <!-- Let's switch to an arrow if standard, but close is often used for modals. I'll use arrow_back if available or similar. -->
+    <!-- Android default arrow is usually home as up. I'll use a standard drawable if I can't find one. ic_menu_close_clear_cancel is X. -->
+    <!-- I'll use @android:drawable/ic_menu_revert or similar if I can't recall the arrow name, but usually it's custom. -->
+    <!-- I'll stick to a simple back arrow representation or just use the text "<" if no drawable. -->
+    <!-- Actually, I'll use @android:drawable/ic_menu_revert which is an undo arrow, or better yet, just a text button or standard back. -->
+    <!-- Let's use a standard ImageButton and assume a drawable exists or use a system one. @android:drawable/ic_media_previous is an arrow. -->
+    
+    <!-- Re-reading: "arrow on top left". I'll use a vector asset if I could, but I can't create one easily. I'll use a simple TextView "<" or standard system drawable. -->
+    <!-- I will use @android:drawable/arrow_up_float which is an arrow. Or just a text view with an arrow character for simplicity and robustness. -->
+
+    <ImageButton
+        android:id="@+id/btnSettings"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@android:drawable/ic_menu_preferences"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/black"
+        android:contentDescription="Settings" />
+
+    <TextView
+        android:id="@+id/tvFriendName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Friend Name"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnBack" />
+
+    <TextView
+        android:id="@+id/tvNoExpensesSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="No expenses here yet."
+        android:textSize="14sp"
+        android:textColor="#808080"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvFriendName" />
+
+    <LinearLayout
+        android:id="@+id/layoutButtons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/tvNoExpensesSmall">
+
+        <Button
+            android:id="@+id/btnSettleUp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginEnd="8dp"
+            android:text="Settle up" />
+
+        <Button
+            android:id="@+id/btnRemind"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:text="Remind" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvNoExpensesLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:text="No expenses here yet."
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layoutButtons" />
+
+    <TextView
+        android:id="@+id/tvAddExpenseHint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Add an expense to get this party started."
+        android:textSize="14sp"
+        android:textColor="#808080"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvNoExpensesLarge" />
+
+    <Button
+        android:id="@+id/btnAddExpense"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:text="Add expense"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

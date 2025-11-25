@@ -54,7 +54,8 @@ public class GroupsFragment extends Fragment {
         });
 
         view.findViewById(R.id.btnAddExpense).setOnClickListener(v -> {
-            android.widget.Toast.makeText(requireContext(), "Add expense clicked", android.widget.Toast.LENGTH_SHORT).show();
+            android.content.Intent intent = new android.content.Intent(getActivity(), AddExpenseActivity.class);
+            startActivity(intent);
         });
         
         loadGroups(view);

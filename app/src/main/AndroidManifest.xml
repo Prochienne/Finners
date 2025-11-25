@@ -60,6 +60,12 @@
         <activity
             android:name=".FriendSettingsActivity"
             android:exported="false" />
+        <activity
+            android:name=".AddExpenseActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SettleUpActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

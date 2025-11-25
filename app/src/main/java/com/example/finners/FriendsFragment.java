@@ -29,7 +29,7 @@ public class FriendsFragment extends Fragment {
             startActivity(intent);
         });
 
-        FriendsRepository repository = FriendsRepository.getInstance();
+        FriendsRepository repository = FriendsRepository.getInstance(requireContext());
         java.util.List<Contact> friends = repository.getFriends();
 
         if (friends.isEmpty()) {
@@ -53,7 +53,7 @@ public class FriendsFragment extends Fragment {
         if (view != null) {
             androidx.recyclerview.widget.RecyclerView rvFriends = view.findViewById(R.id.rvFriends);
             android.widget.TextView tvFriendsEmpty = view.findViewById(R.id.tvFriendsEmpty);
-            FriendsRepository repository = FriendsRepository.getInstance();
+            FriendsRepository repository = FriendsRepository.getInstance(requireContext());
             java.util.List<Contact> friends = repository.getFriends();
 
             if (friends.isEmpty()) {
