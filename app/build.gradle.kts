@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
+    alias(libs.plugins.google.services)
 }
 
 android {
@@ -48,4 +49,6 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
     implementation("com.journeyapps:zxing-android-embedded:4.3.0")
     implementation("com.google.zxing:core:3.4.1")
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.auth)
 }

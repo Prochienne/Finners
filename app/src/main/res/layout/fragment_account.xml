@@ -13,7 +13,7 @@
         android:text="Account"
         android:textSize="24sp"
         android:textStyle="bold"
-        android:textColor="#000000"
+        android:textColor="@color/colorTextPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -26,7 +26,7 @@
         android:text="User Name"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:textColor="#000000"
+        android:textColor="@color/colorTextPrimary"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvAccountTitle" />
 
@@ -37,7 +37,7 @@
         android:layout_marginTop="8dp"
         android:text="user@example.com"
         android:textSize="16sp"
-        android:textColor="#666666"
+        android:textColor="@color/colorTextSecondary"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvUserName" />
 
@@ -66,7 +66,7 @@
         android:text="Preferences"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:textColor="#000000"
+        android:textColor="@color/colorTextPrimary"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnScanCode" />
 
@@ -103,7 +103,7 @@
         android:text="Feedback"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:textColor="#000000"
+        android:textColor="@color/colorTextPrimary"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnSecurity" />
 
@@ -130,7 +130,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:text="Logout"
-        android:textColor="#FF0000"
+        android:textColor="@color/colorError"
         app:layout_constraintTop_toBottomOf="@+id/btnContactSupport" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -15,7 +15,7 @@
         android:src="@android:drawable/ic_menu_revert"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tint="#000000" />
+        app:tint="@color/colorTextPrimary" />
 
     <TextView
         android:id="@+id/tvLoginTitle"
@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:text="Log in"
-        android:textColor="#000000"
+        android:textColor="@color/colorTextPrimary"
         android:textSize="32sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -35,7 +35,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:text="Email address"
-        android:textColor="#666666"
+        android:textColor="@color/colorTextSecondary"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvLoginTitle" />
@@ -57,7 +57,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:text="Password"
-        android:textColor="#666666"
+        android:textColor="@color/colorTextSecondary"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etEmail" />
@@ -96,7 +96,7 @@
         android:clickable="true"
         android:focusable="true"
         android:text="Forgot your password?"
-        android:textColor="#0000FF"
+        android:textColor="@color/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnLogin" />

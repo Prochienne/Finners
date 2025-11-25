@@ -15,7 +15,7 @@
         android:src="@android:drawable/ic_menu_close_clear_cancel"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/black"
+        app:tint="@color/colorTextPrimary"
         android:contentDescription="Back" />
     <!-- Using close icon as back/close for now, or arrow if preferred. Prompt says "arrow on top left". -->
     <!-- Let's switch to an arrow if standard, but close is often used for modals. I'll use arrow_back if available or similar. -->
@@ -36,7 +36,7 @@
         android:src="@android:drawable/ic_menu_preferences"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/black"
+        app:tint="@color/colorTextPrimary"
         android:contentDescription="Settings" />
 
     <TextView

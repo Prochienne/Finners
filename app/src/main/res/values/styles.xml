@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="MyDotTabs" parent="Widget.Material3.TabLayout">
+        <item name="tabBackground">@android:color/transparent</item>
+        <item name="tabIndicatorHeight">0dp</item>
+        <item name="tabRippleColor">@android:color/transparent</item>
+        <item name="tabGravity">center</item>
+        <item name="tabIndicatorGravity">center</item>
+        <item name="tabMaxWidth">20dp</item>
+    </style>
+</resources>

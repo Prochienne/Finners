@@ -4,17 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?android:attr/windowBackground"
     tools:context=".AddExpenseActivity">
 
+    <!-- Toolbar Area -->
     <ImageButton
         android:id="@+id/btnBack"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:contentDescription="Back"
         android:src="@android:drawable/ic_menu_revert"
+        app:tint="?attr/colorOnSurface"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -22,10 +25,10 @@
         android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
         android:text="Add expense"
         android:textSize="20sp"
         android:textStyle="bold"
+        android:textColor="?attr/colorOnSurface"
         app:layout_constraintBottom_toBottomOf="@+id/btnBack"
         app:layout_constraintStart_toEndOf="@+id/btnBack"
         app:layout_constraintTop_toTopOf="@+id/btnBack" />
@@ -34,94 +37,154 @@
         android:id="@+id/btnSave"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:contentDescription="Save"
         android:src="@android:drawable/checkbox_on_background"
+        app:tint="?attr/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- Participants Section -->
     <TextView
         android:id="@+id/tvWithYouAnd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="24dp"
         android:text="With you and:"
-        android:textSize="16sp"
+        android:textSize="14sp"
+        android:textColor="?attr/colorOnSurface"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnBack" />
 
-    <EditText
-        android:id="@+id/etSearch"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilSearch"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="16dp"
-        android:hint="Enter names, groups, or emails"
-        android:inputType="textPersonName"
+        app:boxBackgroundMode="none"
+        app:hintEnabled="false"
         app:layout_constraintBottom_toBottomOf="@+id/tvWithYouAnd"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/tvWithYouAnd"
-        app:layout_constraintTop_toTopOf="@+id/tvWithYouAnd" />
+        app:layout_constraintTop_toTopOf="@+id/tvWithYouAnd">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etSearch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter names, groups, or emails"
+            android:inputType="textPersonName"
+            android:textSize="14sp"
+            android:background="@android:color/transparent" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvSearchResults"
         android:layout_width="0dp"
         android:layout_height="200dp"
-        android:layout_marginTop="8dp"
-        android:background="#FFFFFF"
-        android:elevation="4dp"
+        android:layout_marginTop="4dp"
+        android:background="?attr/colorSurface"
+        android:elevation="8dp"
         android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="@+id/etSearch"
-        app:layout_constraintStart_toStartOf="@+id/etSearch"
-        app:layout_constraintTop_toBottomOf="@+id/etSearch" />
+        app:layout_constraintEnd_toEndOf="@+id/tilSearch"
+        app:layout_constraintStart_toStartOf="@+id/tilSearch"
+        app:layout_constraintTop_toBottomOf="@+id/tilSearch" />
 
-    <ImageButton
-        android:id="@+id/btnBillIcon"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:contentDescription="Bill"
-        android:src="@android:drawable/ic_menu_agenda"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvWithYouAnd" />
-
-    <EditText
-        android:id="@+id/etDescription"
-        android:layout_width="0dp"
+    <!-- Main Input Section -->
+    <LinearLayout
+        android:id="@+id/mainInputContainer"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="16dp"
-        android:hint="Enter a description"
-        android:inputType="textCapSentences"
-        app:layout_constraintBottom_toBottomOf="@+id/btnBillIcon"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/btnBillIcon"
-        app:layout_constraintTop_toTopOf="@+id/btnBillIcon" />
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="16dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintTop_toBottomOf="@+id/tvWithYouAnd">
 
+        <ImageButton
+            android:id="@+id/btnBillIcon"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/bg_selected_contact"
+            android:backgroundTint="?attr/colorSurface"
+            android:contentDescription="Category"
+            android:src="@android:drawable/ic_menu_agenda"
+            app:tint="?attr/colorPrimary" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginStart="16dp">
+
+            <EditText
+                android:id="@+id/etDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter a description"
+                android:inputType="textCapSentences"
+                android:textSize="18sp"
+                android:background="@android:color/transparent"
+                android:paddingBottom="8dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginTop="8dp">
+
+                <Button
+                    android:id="@+id/btnCurrency"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minWidth="0dp"
+                    android:paddingHorizontal="12dp"
+                    android:text="$"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/etAmount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:hint="0.00"
+                    android:inputType="numberDecimal"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:background="@android:color/transparent" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Metadata Actions -->
     <LinearLayout
         android:id="@+id/layoutMetadata"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="24dp"
+        android:paddingHorizontal="16dp"
         android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/etDescription"
-        app:layout_constraintTop_toBottomOf="@+id/etDescription">
+        app:layout_constraintTop_toBottomOf="@+id/mainInputContainer">
 
         <Button
             android:id="@+id/btnDate"
+            style="@style/Widget.Material3.Button.OutlinedButton.Icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
             android:text="Today"
-            style="@style/Widget.AppCompat.Button.Small"
-            android:drawableLeft="@android:drawable/ic_menu_my_calendar"
-            android:drawablePadding="4dp"/>
+            app:icon="@android:drawable/ic_menu_my_calendar" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
 
         <ImageButton
             android:id="@+id/btnNote"
@@ -130,6 +193,7 @@
             android:layout_marginEnd="8dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@android:drawable/ic_menu_edit"
+            app:tint="?attr/colorOnSurface"
             android:contentDescription="Add Note" />
 
         <ImageButton
@@ -139,6 +203,7 @@
             android:layout_marginEnd="8dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@android:drawable/ic_menu_camera"
+            app:tint="?attr/colorOnSurface"
             android:contentDescription="Add Receipt" />
 
         <ImageButton
@@ -147,75 +212,54 @@
             android:layout_height="40dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@android:drawable/ic_menu_rotate"
+            app:tint="?attr/colorOnSurface"
             android:contentDescription="Recurring Expense" />
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/btnCurrency"
-        android:layout_width="wrap_content"
+    <!-- Split Details -->
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:text="$"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layoutMetadata" />
-
-    <EditText
-        android:id="@+id/etAmount"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="16dp"
-        android:hint="0.00"
-        android:inputType="numberDecimal"
-        app:layout_constraintBottom_toBottomOf="@+id/btnCurrency"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/btnCurrency"
-        app:layout_constraintTop_toTopOf="@+id/btnCurrency" />
-
-    <TextView
-        android:id="@+id/tvPaidBy"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:orientation="horizontal"
+        android:gravity="center"
         android:layout_marginTop="32dp"
-        android:text="Paid by"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnCurrency" />
+        app:layout_constraintTop_toBottomOf="@+id/layoutMetadata">
 
-    <Button
-        android:id="@+id/btnPayer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="you"
-        style="@style/Widget.AppCompat.Button.Borderless"
-        app:layout_constraintBottom_toBottomOf="@+id/tvPaidBy"
-        app:layout_constraintStart_toEndOf="@+id/tvPaidBy"
-        app:layout_constraintTop_toTopOf="@+id/tvPaidBy" />
+        <TextView
+            android:id="@+id/tvPaidBy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Paid by"
+            android:textSize="16sp"
+            android:textColor="?attr/colorOnSurface" />
 
-    <TextView
-        android:id="@+id/tvAndSplit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="and split"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="@+id/tvPaidBy"
-        app:layout_constraintStart_toEndOf="@+id/btnPayer"
-        app:layout_constraintTop_toTopOf="@+id/tvPaidBy" />
+        <Button
+            android:id="@+id/btnPayer"
+            style="@style/Widget.Material3.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="you"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
-    <Button
-        android:id="@+id/btnSplit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="equally"
-        style="@style/Widget.AppCompat.Button.Borderless"
-        app:layout_constraintBottom_toBottomOf="@+id/tvPaidBy"
-        app:layout_constraintStart_toEndOf="@+id/tvAndSplit"
-        app:layout_constraintTop_toTopOf="@+id/tvPaidBy" />
+        <TextView
+            android:id="@+id/tvAndSplit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="and split"
+            android:textSize="16sp"
+            android:textColor="?attr/colorOnSurface" />
+
+        <Button
+            android:id="@+id/btnSplit"
+            style="@style/Widget.Material3.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="equally"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

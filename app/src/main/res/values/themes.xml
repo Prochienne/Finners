@@ -1,22 +1,32 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.Finners" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <item name="colorPrimary">#000000</item>
-        <item name="colorPrimaryVariant">#000000</item>
-        <item name="colorOnPrimary">#FFFFFF</item>
-        <item name="colorSecondary">#000000</item>
-        <item name="colorSecondaryVariant">#000000</item>
-        <item name="colorOnSecondary">#FFFFFF</item>
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimaryContainer">@color/colorPrimary</item>
+        <item name="colorOnPrimaryContainer">@color/white</item>
+        
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <item name="colorSecondaryContainer">@color/colorSecondary</item>
+        <item name="colorOnSecondaryContainer">@color/white</item>
+
+        <item name="android:colorBackground">@color/colorBackground</item>
+        <item name="colorSurface">@color/colorSurface</item>
+        <item name="colorOnSurface">@color/colorTextPrimary</item>
+        <item name="android:textColorPrimary">@color/colorTextPrimary</item>
+        <item name="android:textColorSecondary">@color/colorTextSecondary</item>
+        
+        <item name="colorTextSecondary">@color/colorTextSecondary</item>
+        
+        <!-- Status bar color. -->
     </style>
 
     <style name="Theme.Finners" parent="Base.Theme.Finners" />
-    <style name="MyDotTabs" parent="Widget.MaterialComponents.TabLayout">
-        <item name="tabIndicatorColor">@android:color/transparent</item>
-        <item name="tabIndicatorHeight">0dp</item>
-        <item name="tabIconTint">@null</item>
-        <item name="tabRippleColor">@android:color/transparent</item>
-        <item name="tabBackground">@android:color/transparent</item>
-        <item name="android:background">@android:color/transparent</item>
+    
+    <style name="Widget.Finners.Button.Text" parent="Widget.Material3.Button.TextButton">
+        <item name="android:textColor">@color/colorPrimary</item>
     </style>
 </resources>

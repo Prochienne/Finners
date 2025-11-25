@@ -15,14 +15,14 @@
         android:src="@android:drawable/ic_menu_close_clear_cancel"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tint="#000000" />
+        app:tint="@color/colorTextPrimary" />
 
     <TextView
         android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Create a group"
-        android:textColor="#000000"
+        android:textColor="@color/colorTextPrimary"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/btnClose"
@@ -37,7 +37,7 @@
         android:clickable="true"
         android:focusable="true"
         android:text="Done"
-        android:textColor="#666666"
+        android:textColor="@color/colorTextSecondary"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/btnClose"
@@ -50,7 +50,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:text="Group name"
-        android:textColor="#666666"
+        android:textColor="@color/colorTextSecondary"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnClose" />
@@ -74,7 +74,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:text="Type"
-        android:textColor="#666666"
+        android:textColor="@color/colorTextSecondary"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etGroupName" />
@@ -148,7 +148,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Add trip dates"
-                android:textColor="#000000"
+                android:textColor="@color/colorTextPrimary"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -163,7 +163,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="Finners will remind friends to join, add expenses, and settle up."
-            android:textColor="#666666"
+            android:textColor="@color/colorTextSecondary"
             android:textSize="14sp" />
 
         <LinearLayout
@@ -185,7 +185,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Start"
-                    android:textColor="#666666"
+                    android:textColor="@color/colorTextSecondary"
                     android:textSize="12sp" />
 
                 <EditText
@@ -211,7 +211,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="End"
-                    android:textColor="#666666"
+                    android:textColor="@color/colorTextSecondary"
                     android:textSize="12sp" />
 
                 <EditText

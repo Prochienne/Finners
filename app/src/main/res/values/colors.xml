@@ -2,4 +2,27 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    
+    <!-- Brand Colors -->
+    <color name="colorPrimary">#1CC29F</color> <!-- Mint Green -->
+    <color name="colorPrimaryVariant">#009172</color>
+    <color name="colorSecondary">#FF652F</color> <!-- Vibrant Orange -->
+    <color name="colorSecondaryVariant">#C53200</color>
+    
+    <!-- Backgrounds -->
+    <color name="colorBackground">#F7F9FA</color>
+    <color name="colorSurface">#FFFFFF</color>
+    
+    <!-- Text -->
+    <color name="colorTextPrimary">#333333</color>
+    <color name="colorTextSecondary">#757575</color>
+    <color name="colorTextHint">#BDBDBD</color>
+    
+    <!-- Status -->
+    <color name="colorSuccess">#1CC29F</color>
+    <color name="colorError">#FF5252</color>
+    
+    <!-- UI Elements -->
+    <color name="colorAvatarBackground">#EEEEEE</color>
+    <color name="colorDivider">#CCCCCC</color>
 </resources>

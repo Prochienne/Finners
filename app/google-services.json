@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "80832262820",
+    "project_id": "finners-c7e8d",
+    "storage_bucket": "finners-c7e8d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:80832262820:android:ff123bbf1819eec5466c31",
+        "android_client_info": {
+          "package_name": "com.example.finners"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBFGwUVMHe4gBJZihQotueL7muX2VP5Gv4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

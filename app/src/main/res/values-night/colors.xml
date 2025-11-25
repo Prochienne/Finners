@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    
+    <!-- Brand Colors -->
+    <color name="colorPrimary">#1CC29F</color>
+    <color name="colorPrimaryVariant">#009172</color>
+    <color name="colorSecondary">#FF652F</color>
+    <color name="colorSecondaryVariant">#C53200</color>
+    
+    <!-- Backgrounds -->
+    <color name="colorBackground">#121212</color>
+    <color name="colorSurface">#1E1E1E</color>
+    
+    <!-- Text -->
+    <color name="colorTextPrimary">#E6FFFFFF</color>
+    <color name="colorTextSecondary">#B3FFFFFF</color>
+    <color name="colorTextHint">#66FFFFFF</color>
+    
+    <!-- Status -->
+    <color name="colorSuccess">#1CC29F</color>
+    <color name="colorError">#CF6679</color>
+    
+    <!-- UI Elements -->
+    <color name="colorAvatarBackground">#333333</color>
+    <color name="colorDivider">#333333</color>
+</resources>

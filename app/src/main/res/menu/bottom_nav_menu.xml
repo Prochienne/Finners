@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_groups"
+        android:icon="@android:drawable/ic_menu_agenda"
+        android:title="Groups" />
+    <item
+        android:id="@+id/nav_friends"
+        android:icon="@android:drawable/ic_menu_share"
+        android:title="Friends" />
+    <item
+        android:id="@+id/nav_activity"
+        android:icon="@android:drawable/ic_menu_recent_history"
+        android:title="Activity" />
+    <item
+        android:id="@+id/nav_account"
+        android:icon="@android:drawable/ic_menu_manage"
+        android:title="Account" />
+</menu>

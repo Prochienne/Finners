@@ -15,7 +15,7 @@
         android:src="@android:drawable/ic_menu_revert"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tint="#000000" />
+        app:tint="@color/colorTextPrimary" />
 
     <LinearLayout
         android:id="@+id/layoutTabs"
@@ -32,7 +32,7 @@
             android:layout_weight="1"
             android:background="@android:color/transparent"
             android:text="Scan"
-            android:textColor="#000000" />
+            android:textColor="@color/colorTextPrimary" />
 
         <Button
             android:id="@+id/btnTabMyCode"
@@ -41,14 +41,14 @@
             android:layout_weight="1"
             android:background="@android:color/transparent"
             android:text="My Code"
-            android:textColor="#666666" />
+            android:textColor="@color/colorTextSecondary" />
     </LinearLayout>
 
     <View
         android:id="@+id/divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#CCCCCC"
+        android:background="@color/colorDivider"
         app:layout_constraintTop_toBottomOf="@+id/layoutTabs" />
 
     <!-- Scan View -->
@@ -70,7 +70,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="32dp"
             android:text="Point camera at a code to scan"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/white"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

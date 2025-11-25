@@ -15,7 +15,7 @@
         android:src="@android:drawable/ic_menu_revert"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/black"
+        app:tint="@color/colorTextPrimary"
         android:contentDescription="Back" />
     <!-- Using ic_menu_revert as a back arrow alternative if standard back arrow isn't easily available by name, or I'll trust the system has a back arrow. -->
     <!-- Actually, let's use a standard back arrow if possible. I'll stick to ic_menu_revert or just a text "<" if I want to be safe, but ImageButton with a drawable is better. -->

@@ -15,7 +15,7 @@
         android:src="@android:drawable/ic_menu_revert"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tint="#000000" />
+        app:tint="@color/colorTextPrimary" />
 
     <EditText
         android:id="@+id/etSearchFriend"
@@ -62,7 +62,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:text="From your contacts"
-        android:textColor="#666666"
+        android:textColor="@color/colorTextSecondary"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnAddSomeoneNew" />
