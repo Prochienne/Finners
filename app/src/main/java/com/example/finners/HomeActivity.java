@@ -17,6 +17,14 @@ public class HomeActivity extends AppCompatActivity {
         userName = getIntent().getStringExtra("USER_NAME");
         userEmail = getIntent().getStringExtra("USER_EMAIL");
 
+        if (userName == null || userEmail == null) {
+            com.google.firebase.auth.FirebaseUser user = com.google.firebase.auth.FirebaseAuth.getInstance().getCurrentUser();
+            if (user != null) {
+                userName = user.getDisplayName();
+                userEmail = user.getEmail();
+            }
+        }
+
         // Load default fragment
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()

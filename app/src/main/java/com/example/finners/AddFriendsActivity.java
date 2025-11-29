@@ -19,6 +19,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class AddFriendsActivity extends AppCompatActivity {
 
@@ -96,8 +98,14 @@ public class AddFriendsActivity extends AppCompatActivity {
                 null, null, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");
 
         if (cursor != null) {
+            Set<String> seenContactIds = new HashSet<>();
             while (cursor.moveToNext()) {
                 String id = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID));
+                if (seenContactIds.contains(id)) {
+                    continue;
+                }
+                seenContactIds.add(id);
+                
                 String name = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
                 String phoneNumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
                 contactList.add(new Contact(id, name, phoneNumber));

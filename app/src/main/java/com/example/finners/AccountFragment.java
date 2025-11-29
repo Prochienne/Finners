@@ -61,5 +61,34 @@ public class AccountFragment extends Fragment {
             android.content.Intent intent = new android.content.Intent(getActivity(), ScanCodeActivity.class);
             startActivity(intent);
         });
+
+        view.findViewById(R.id.btnEdit).setOnClickListener(v -> {
+            android.content.Intent intent = new android.content.Intent(getActivity(), EditProfileActivity.class);
+            startActivity(intent);
+        });
+
+        view.findViewById(R.id.btnEmailSettings).setOnClickListener(v -> {
+            android.content.Intent intent = new android.content.Intent(getActivity(), EmailSettingsActivity.class);
+            startActivity(intent);
+        });
+
+        view.findViewById(R.id.btnNotifications).setOnClickListener(v -> {
+            android.content.Intent intent = new android.content.Intent(getActivity(), NotificationsActivity.class);
+            startActivity(intent);
+        });
+
+        view.findViewById(R.id.btnSecurity).setOnClickListener(v -> {
+            android.content.Intent intent = new android.content.Intent(getActivity(), SecurityActivity.class);
+            startActivity(intent);
+        });
+
+
+        View btnLogout = view.findViewById(R.id.btnLogout);
+        btnLogout.setOnClickListener(v -> {
+            com.google.firebase.auth.FirebaseAuth.getInstance().signOut();
+            android.content.Intent intent = new android.content.Intent(getActivity(), MainActivity.class);
+            intent.setFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK | android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+        });
     }
 }

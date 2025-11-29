@@ -44,6 +44,10 @@ public class ReviewActivity extends AppCompatActivity {
             for (Contact contact : selectedContacts) {
                 repository.addFriend(contact);
             }
+            if (!selectedContacts.isEmpty()) {
+                String message = "You added " + selectedContacts.size() + " new friend" + (selectedContacts.size() > 1 ? "s" : "");
+                ActivityLogger.log(this, message);
+            }
             // Navigate back to FriendsFragment (MainActivity)
             Intent intent = new Intent(this, HomeActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);

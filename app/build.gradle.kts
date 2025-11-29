@@ -51,4 +51,5 @@ dependencies {
     implementation("com.google.zxing:core:3.4.1")
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
+    implementation(libs.firebase.firestore)
 }

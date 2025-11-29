@@ -27,7 +27,10 @@ import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 import java.io.ByteArrayOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.util.UUID;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class ScanCodeActivity extends AppCompatActivity {
 
@@ -94,15 +97,59 @@ public class ScanCodeActivity extends AppCompatActivity {
     private void startScanning() {
         barcodeScannerView.resume();
         barcodeScannerView.decodeContinuous(result -> {
-            // Handle scan result
-            runOnUiThread(() -> {
-                Toast.makeText(this, "Scanned: " + result.getText(), Toast.LENGTH_SHORT).show();
-            });
+            String scannedText = result.getText();
+            if (scannedText != null && scannedText.startsWith("finners:add_friend")) {
+                barcodeScannerView.pause();
+                runOnUiThread(() -> {
+                    try {
+                        Uri uri = Uri.parse(scannedText);
+                        String id = uri.getQueryParameter("id");
+                        String name = uri.getQueryParameter("name");
+                        String email = uri.getQueryParameter("email"); // Optional
+
+                        if (id != null && name != null) {
+                            Contact newFriend = new Contact(id, name, email != null ? email : "");
+                            FriendsRepository.getInstance(this).addFriend(newFriend);
+                            Toast.makeText(this, "Added friend: " + name, Toast.LENGTH_LONG).show();
+                            finish(); // Go back after adding
+                        } else {
+                            Toast.makeText(this, "Invalid Finners QR Code", Toast.LENGTH_SHORT).show();
+                            barcodeScannerView.resume();
+                        }
+                    } catch (Exception e) {
+                        Toast.makeText(this, "Error parsing QR Code", Toast.LENGTH_SHORT).show();
+                        barcodeScannerView.resume();
+                    }
+                });
+            } else {
+                // Optional: Handle other QR codes or ignore
+                // runOnUiThread(() -> Toast.makeText(this, "Scanned: " + scannedText, Toast.LENGTH_SHORT).show());
+            }
         });
     }
 
     private void generateNewCode() {
-        myCode = UUID.randomUUID().toString();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            String id = user.getUid();
+            String name = user.getDisplayName();
+            String email = user.getEmail();
+            if (name == null) name = "User";
+            
+            // Format: finners:add_friend?id=<uid>&name=<name>&email=<email>
+            Uri.Builder builder = new Uri.Builder();
+            builder.scheme("finners")
+                    .path("add_friend")
+                    .appendQueryParameter("id", id)
+                    .appendQueryParameter("name", name);
+            if (email != null) {
+                builder.appendQueryParameter("email", email);
+            }
+            myCode = builder.build().toString();
+        } else {
+            myCode = "finners:error?msg=not_logged_in";
+        }
+
         try {
             MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
             BitMatrix bitMatrix = multiFormatWriter.encode(myCode, BarcodeFormat.QR_CODE, 500, 500);

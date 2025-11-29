@@ -59,9 +59,8 @@ public class GroupsFragment extends Fragment {
         });
         
         view.findViewById(R.id.btnNonGroupExpenses).setOnClickListener(v -> {
-            // Navigate to non-group expenses or show a toast for now
-            // Assuming it might just filter expenses or show a specific list
-             android.widget.Toast.makeText(getContext(), "Non-group expenses clicked", android.widget.Toast.LENGTH_SHORT).show();
+            android.content.Intent intent = new android.content.Intent(getActivity(), NonGroupExpensesActivity.class);
+            startActivity(intent);
         });
         
         loadGroups(view);
@@ -76,6 +75,8 @@ public class GroupsFragment extends Fragment {
     }
     
     private void loadGroups(View view) {
+        if (view == null || getActivity() == null) return;
+
         android.content.SharedPreferences prefs = requireActivity().getSharedPreferences("FinnerPrefs", android.content.Context.MODE_PRIVATE);
         java.util.Set<String> groups = prefs.getStringSet("groups", new java.util.HashSet<>());
         
@@ -83,20 +84,23 @@ public class GroupsFragment extends Fragment {
         View scrollViewGroups = view.findViewById(R.id.scrollViewGroups);
         android.widget.LinearLayout layoutGroups = view.findViewById(R.id.layoutGroups);
         
+        if (layoutGroups == null) return;
+
         // Clear existing buttons
         layoutGroups.removeAllViews();
         
         if (groups.isEmpty()) {
             // Show empty state
-            tvEmptyState.setVisibility(View.VISIBLE);
-            scrollViewGroups.setVisibility(View.GONE);
+            if (tvEmptyState != null) tvEmptyState.setVisibility(View.VISIBLE);
+            if (scrollViewGroups != null) scrollViewGroups.setVisibility(View.GONE);
         } else {
             // Hide empty state and show groups
-            tvEmptyState.setVisibility(View.GONE);
-            scrollViewGroups.setVisibility(View.VISIBLE);
+            if (tvEmptyState != null) tvEmptyState.setVisibility(View.GONE);
+            if (scrollViewGroups != null) scrollViewGroups.setVisibility(View.VISIBLE);
             
             // Create button for each group
             for (String groupName : groups) {
+                if (getContext() == null) continue;
                 android.widget.Button groupButton = new android.widget.Button(requireContext());
                 android.widget.LinearLayout.LayoutParams params = new android.widget.LinearLayout.LayoutParams(
                     android.widget.LinearLayout.LayoutParams.MATCH_PARENT,

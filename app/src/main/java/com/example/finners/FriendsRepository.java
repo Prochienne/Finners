@@ -47,6 +47,16 @@ public class FriendsRepository {
         return false;
     }
 
+    public void removeFriend(Contact contact) {
+        for (int i = 0; i < friends.size(); i++) {
+            if (friends.get(i).getId().equals(contact.getId())) {
+                friends.remove(i);
+                saveFriends();
+                break;
+            }
+        }
+    }
+
     public double getBalance(String friendId) {
         return balances.getOrDefault(friendId, 0.0);
     }

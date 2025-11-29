@@ -6,6 +6,11 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 public class FriendDetailsActivity extends AppCompatActivity {
@@ -35,6 +40,7 @@ public class FriendDetailsActivity extends AppCompatActivity {
         btnSettings.setOnClickListener(v -> {
             Intent intent = new Intent(FriendDetailsActivity.this, FriendSettingsActivity.class);
             intent.putExtra("FRIEND_NAME", friendName);
+            intent.putExtra("FRIEND_ID", friendId);
             startActivity(intent);
         });
 
@@ -48,7 +54,10 @@ public class FriendDetailsActivity extends AppCompatActivity {
 
         Button btnRemind = findViewById(R.id.btnRemind);
         btnRemind.setOnClickListener(v -> {
-            Toast.makeText(this, "Remind clicked", Toast.LENGTH_SHORT).show();
+            Intent shareIntent = new Intent(Intent.ACTION_SEND);
+            shareIntent.setType("text/plain");
+            shareIntent.putExtra(Intent.EXTRA_TEXT, "Hey " + friendName + ", just a reminder to settle up on Finners!");
+            startActivity(Intent.createChooser(shareIntent, "Send reminder via"));
         });
 
         Button btnAddExpense = findViewById(R.id.btnAddExpense);
@@ -61,7 +70,26 @@ public class FriendDetailsActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        // Ideally show balance here too, but layout doesn't have a TextView for it yet.
-        // For now, Settle Up button works.
+        updateBalanceDisplay();
+    }
+
+    private void updateBalanceDisplay() {
+        if (friendId == null) return;
+
+        FriendsRepository repository = FriendsRepository.getInstance(this);
+        double balance = repository.getBalance(friendId);
+        
+        TextView tvNoExpensesSmall = findViewById(R.id.tvNoExpensesSmall);
+        
+        if (balance > 0) {
+            tvNoExpensesSmall.setText("owes you $" + String.format("%.2f", balance));
+            tvNoExpensesSmall.setTextColor(android.graphics.Color.parseColor("#4CAF50")); // Green
+        } else if (balance < 0) {
+            tvNoExpensesSmall.setText("you owe $" + String.format("%.2f", Math.abs(balance)));
+            tvNoExpensesSmall.setTextColor(android.graphics.Color.parseColor("#F44336")); // Red
+        } else {
+            tvNoExpensesSmall.setText("settled up");
+            tvNoExpensesSmall.setTextColor(android.graphics.Color.GRAY);
+        }
     }
 }

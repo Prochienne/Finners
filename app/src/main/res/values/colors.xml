@@ -23,6 +23,6 @@
     <color name="colorError">#FF5252</color>
     
     <!-- UI Elements -->
-    <color name="colorAvatarBackground">#EEEEEE</color>
+    <color name="colorAvatarBa45ckground">#EEEEEE</color>
     <color name="colorDivider">#CCCCCC</color>
 </resources>

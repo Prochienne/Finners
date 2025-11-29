@@ -15,6 +15,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import java.util.ArrayList;
 import java.util.List;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 public class ActivityFragment extends Fragment {
 
@@ -49,28 +52,39 @@ public class ActivityFragment extends Fragment {
     }
 
     private void loadActivityLogs() {
-        SharedPreferences prefs = requireActivity().getSharedPreferences("FinnerPrefs", Context.MODE_PRIVATE);
-        String logsJson = prefs.getString("activity_logs", "[]");
-        List<String> logs = new ArrayList<>();
-        
-        try {
-            JSONArray jsonArray = new JSONArray(logsJson);
-            for (int i = jsonArray.length() - 1; i >= 0; i--) {
-                logs.add(jsonArray.getString(i));
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("activity_logs")
+            .orderBy("timestamp", Query.Direction.DESCENDING)
+            .addSnapshotListener((snapshots, e) -> {
+                if (e != null) {
+                    return;
+                }
 
-        if (logs.isEmpty()) {
-            tvActivityEmpty.setVisibility(View.VISIBLE);
-            lvActivityLog.setVisibility(View.GONE);
-        } else {
-            tvActivityEmpty.setVisibility(View.GONE);
-            lvActivityLog.setVisibility(View.VISIBLE);
-            ActivityLogAdapter adapter = new ActivityLogAdapter(requireContext(), logs);
-            lvActivityLog.setAdapter(adapter);
-        }
+                List<String> logs = new ArrayList<>();
+                if (snapshots != null) {
+                    for (QueryDocumentSnapshot doc : snapshots) {
+                        String message = doc.getString("message");
+                        String subMessage = doc.getString("subMessage");
+                        if (message != null) {
+                            if (subMessage != null && !subMessage.isEmpty()) {
+                                logs.add(message + "|" + subMessage);
+                            } else {
+                                logs.add(message);
+                            }
+                        }
+                    }
+                }
+
+                if (logs.isEmpty()) {
+                    tvActivityEmpty.setVisibility(View.VISIBLE);
+                    lvActivityLog.setVisibility(View.GONE);
+                } else {
+                    tvActivityEmpty.setVisibility(View.GONE);
+                    lvActivityLog.setVisibility(View.VISIBLE);
+                    ActivityLogAdapter adapter = new ActivityLogAdapter(requireContext(), logs);
+                    lvActivityLog.setAdapter(adapter);
+                }
+            });
     }
 
     private static class ActivityLogAdapter extends ArrayAdapter<String> {

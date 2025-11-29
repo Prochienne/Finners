@@ -71,7 +71,30 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         tvForgotPassword.setOnClickListener(v -> {
-            // Do nothing for now
+            EditText etEmail = findViewById(R.id.etEmail);
+            String email = etEmail.getText().toString().trim();
+
+            if (email.isEmpty()) {
+                Toast.makeText(LoginActivity.this, "Please enter your email to reset password", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            mAuth.sendPasswordResetEmail(email)
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(LoginActivity.this, "Reset email sent", Toast.LENGTH_SHORT).show();
+                        } else {
+                            String errorMessage = "Failed to send reset email";
+                            try {
+                                throw task.getException();
+                            } catch (FirebaseAuthInvalidUserException e) {
+                                errorMessage = "User not found";
+                            } catch (Exception e) {
+                                errorMessage = e.getMessage();
+                            }
+                            Toast.makeText(LoginActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
+                        }
+                    });
         });
     }
 }

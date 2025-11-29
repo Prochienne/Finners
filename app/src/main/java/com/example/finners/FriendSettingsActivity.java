@@ -32,17 +32,46 @@ public class FriendSettingsActivity extends AppCompatActivity {
 
         Button btnRemoveFriend = findViewById(R.id.btnRemoveFriend);
         btnRemoveFriend.setOnClickListener(v -> {
-            Toast.makeText(this, "Remove friend clicked", Toast.LENGTH_SHORT).show();
+            new android.app.AlertDialog.Builder(this)
+                .setTitle("Remove Friend")
+                .setMessage("Are you sure you want to remove " + friendName + " from your friends list?")
+                .setPositiveButton("Remove", (dialog, which) -> {
+                    removeFriend();
+                })
+                .setNegativeButton("Cancel", null)
+                .show();
         });
+    }
 
-        Button btnBlockUser = findViewById(R.id.btnBlockUser);
-        btnBlockUser.setOnClickListener(v -> {
-            Toast.makeText(this, "Block user clicked", Toast.LENGTH_SHORT).show();
-        });
-
-        Button btnReportUser = findViewById(R.id.btnReportUser);
-        btnReportUser.setOnClickListener(v -> {
-            Toast.makeText(this, "Report user clicked", Toast.LENGTH_SHORT).show();
-        });
+    private void removeFriend() {
+        FriendsRepository repository = FriendsRepository.getInstance(this);
+        String friendId = getIntent().getStringExtra("FRIEND_ID");
+        
+        java.util.List<Contact> friends = repository.getFriends();
+        Contact friendToRemove = null;
+        
+        for (Contact friend : friends) {
+            if (friendId != null && friend.getId().equals(friendId)) {
+                friendToRemove = friend;
+                break;
+            } else if (friend.getName().equals(friendName)) {
+                // Fallback to name if ID is null (though it shouldn't be with updated caller)
+                friendToRemove = friend;
+                break;
+            }
+        }
+        
+        if (friendToRemove != null) {
+            repository.removeFriend(friendToRemove);
+            Toast.makeText(this, "Friend removed", Toast.LENGTH_SHORT).show();
+            
+            // Navigate back to Home (Friends tab)
+            android.content.Intent intent = new android.content.Intent(this, HomeActivity.class);
+            intent.addFlags(android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP | android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            startActivity(intent);
+            finish();
+        } else {
+            Toast.makeText(this, "Error: Friend not found", Toast.LENGTH_SHORT).show();
+        }
     }
 }

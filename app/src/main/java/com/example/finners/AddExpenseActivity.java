@@ -37,7 +37,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import com.google.firebase.firestore.FirebaseFirestore;
+
 public class AddExpenseActivity extends AppCompatActivity {
+
+    private FirebaseFirestore db;
 
     private EditText etSearch, etDescription, etAmount;
     private RecyclerView rvSearchResults;
@@ -68,6 +72,12 @@ public class AddExpenseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_expense);
+
+        try {
+            db = FirebaseFirestore.getInstance();
+        } catch (Exception e) {
+            db = null; // Firebase not available
+        }
 
         ImageButton btnBack = findViewById(R.id.btnBack);
         btnBack.setOnClickListener(v -> finish());
@@ -481,98 +491,110 @@ public class AddExpenseActivity extends AppCompatActivity {
     }
 
     private void saveExpense() {
-        String description = etDescription.getText().toString().trim();
-        String amountStr = etAmount.getText().toString().trim();
+        try {
+            String description = etDescription.getText().toString().trim();
+            String amountStr = etAmount.getText().toString().trim();
 
-        if (description.isEmpty()) {
-            Toast.makeText(this, "Please enter a description", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        if (amountStr.isEmpty()) {
-            Toast.makeText(this, "Please enter an amount", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        double amount = Double.parseDouble(amountStr);
-        
-        // Calculate splits
-        Map<String, Double> finalAmounts = new HashMap<>();
-        List<String> participants = new ArrayList<>();
-        participants.add("You");
-        participants.addAll(selectedNames);
-
-        if (currentSplitType == SplitType.EQUALLY) {
-            double splitAmount = amount / participants.size();
-            for (String p : participants) finalAmounts.put(p, splitAmount);
-        } else if (currentSplitType == SplitType.UNEQUALLY) {
-            finalAmounts.putAll(splitWeights);
-        } else if (currentSplitType == SplitType.PERCENTAGES) {
-            for (String p : participants) {
-                double percent = splitWeights.getOrDefault(p, 0.0);
-                finalAmounts.put(p, amount * (percent / 100.0));
+            if (description.isEmpty()) {
+                Toast.makeText(this, "Please enter a description", Toast.LENGTH_SHORT).show();
+                return;
             }
-        } else if (currentSplitType == SplitType.SHARES) {
-            double totalShares = 0;
-            for (double s : splitWeights.values()) totalShares += s;
-            if (totalShares == 0) totalShares = 1; 
+
+            if (amountStr.isEmpty()) {
+                Toast.makeText(this, "Please enter an amount", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            double amount = 0.0;
+            try {
+                amount = Double.parseDouble(amountStr);
+            } catch (NumberFormatException e) {
+                Toast.makeText(this, "Invalid amount format", Toast.LENGTH_SHORT).show();
+                return;
+            }
             
-            for (String p : participants) {
-                double shares = splitWeights.getOrDefault(p, 0.0);
-                finalAmounts.put(p, amount * (shares / totalShares));
+            // Calculate splits
+            Map<String, Double> finalAmounts = new HashMap<>();
+            List<String> participants = new ArrayList<>();
+            participants.add("You");
+            if (selectedNames != null) {
+                participants.addAll(selectedNames);
             }
-        }
 
-        double youPaid = currentPayer.equals("You") ? amount : 0; 
-        double youOwe = finalAmounts.getOrDefault("You", 0.0);
-        double youGetBack = youPaid - youOwe;
-        
-        // Update balances
-        FriendsRepository repository = FriendsRepository.getInstance(this);
-        List<Contact> friends = repository.getFriends();
-        
-        for (String name : selectedNames) {
-            for (Contact friend : friends) {
-                if (friend.getName().equals(name)) {
-                    double friendOwes = finalAmounts.getOrDefault(name, 0.0);
-                    if (currentPayer.equals("You")) {
-                        repository.updateBalance(friend.getId(), friendOwes);
-                    } else if (currentPayer.equals(name)) {
-                        repository.updateBalance(friend.getId(), -youOwe); 
-                    }
-                    break;
+            if (currentSplitType == SplitType.EQUALLY) {
+                double splitAmount = amount / participants.size();
+                for (String p : participants) finalAmounts.put(p, splitAmount);
+            } else if (currentSplitType == SplitType.UNEQUALLY) {
+                if (splitWeights != null) {
+                    finalAmounts.putAll(splitWeights);
+                }
+            } else if (currentSplitType == SplitType.PERCENTAGES) {
+                for (String p : participants) {
+                    double percent = (splitWeights != null) ? splitWeights.getOrDefault(p, 0.0) : 0.0;
+                    finalAmounts.put(p, amount * (percent / 100.0));
+                }
+            } else if (currentSplitType == SplitType.SHARES) {
+                double totalShares = 0;
+                if (splitWeights != null) {
+                    for (double s : splitWeights.values()) totalShares += s;
+                }
+                if (totalShares == 0) totalShares = 1; 
+                
+                for (String p : participants) {
+                    double shares = (splitWeights != null) ? splitWeights.getOrDefault(p, 0.0) : 0.0;
+                    finalAmounts.put(p, amount * (shares / totalShares));
                 }
             }
-        }
 
-        String logMessage = "You added \"" + description + "\"";
-        String subMessage;
-        if (youGetBack > 0) {
-            subMessage = "You get back " + String.format("%.2f", youGetBack);
-        } else if (youGetBack < 0) {
-            subMessage = "You owe " + String.format("%.2f", -youGetBack);
-        } else {
-            subMessage = "You are settled";
-        }
+            double youPaid = currentPayer.equals("You") ? amount : 0; 
+            double youOwe = finalAmounts.getOrDefault("You", 0.0);
+            double youGetBack = youPaid - youOwe;
+            
+            // Update balances
+            FriendsRepository repository = FriendsRepository.getInstance(this);
+            if (repository != null) {
+                List<Contact> friends = repository.getFriends();
+                
+                if (friends != null && selectedNames != null) {
+                    for (String name : selectedNames) {
+                        for (Contact friend : friends) {
+                            if (friend != null && friend.getName() != null && friend.getName().equals(name)) {
+                                double friendOwes = finalAmounts.getOrDefault(name, 0.0);
+                                if (currentPayer.equals("You")) {
+                                    repository.updateBalance(friend.getId(), friendOwes);
+                                } else if (currentPayer.equals(name)) {
+                                    repository.updateBalance(friend.getId(), -youOwe); 
+                                }
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
 
-        saveActivityLog(logMessage, subMessage);
-        saveExpenseDetails(description, amount, finalAmounts);
-        
-        Toast.makeText(this, "Expense added!", Toast.LENGTH_SHORT).show();
-        finish();
-    }
+            String logMessage = "You added \"" + description + "\"";
+            String subMessage;
+            if (youGetBack > 0) {
+                subMessage = "You get back " + String.format("%.2f", youGetBack);
+            } else if (youGetBack < 0) {
+                subMessage = "You owe " + String.format("%.2f", -youGetBack);
+            } else {
+                subMessage = "You are settled";
+            }
 
-    private void saveActivityLog(String message, String subMessage) {
-        SharedPreferences prefs = getSharedPreferences("FinnerPrefs", MODE_PRIVATE);
-        String logsJson = prefs.getString("activity_logs", "[]");
-        try {
-            JSONArray jsonArray = new JSONArray(logsJson);
-            jsonArray.put(message + "|" + subMessage);
-            prefs.edit().putString("activity_logs", jsonArray.toString()).apply();
-        } catch (JSONException e) {
+            ActivityLogger.log(this, logMessage, subMessage);
+            saveExpenseDetails(description, amount, finalAmounts);
+            
+            Toast.makeText(this, "Expense added!", Toast.LENGTH_SHORT).show();
+            finish();
+        } catch (Exception e) {
             e.printStackTrace();
+            ActivityLogger.log(this, "Error adding expense", e.getMessage());
+            Toast.makeText(this, "Error adding expense: " + e.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
+
+
     
     private void saveExpenseDetails(String description, double amount, Map<String, Double> splits) {
         SharedPreferences prefs = getSharedPreferences("FinnerPrefs", MODE_PRIVATE);

@@ -22,7 +22,7 @@ import org.json.JSONException;
 public class CreateGroupActivity extends AppCompatActivity {
 
     private EditText etGroupName, etStartDate, etEndDate;
-    private Button btnTypeTrip, btnTypeHome, btnTypeCouple, btnTypeOther;
+    private Button btnTypeTrip, btnTypeHome, btnTypeOther;
     private LinearLayout layoutTripDetails, layoutDatesInput;
     private Switch switchTripDates;
     private String selectedType = "";
@@ -37,7 +37,7 @@ public class CreateGroupActivity extends AppCompatActivity {
         etGroupName = findViewById(R.id.etGroupName);
         btnTypeTrip = findViewById(R.id.btnTypeTrip);
         btnTypeHome = findViewById(R.id.btnTypeHome);
-        btnTypeCouple = findViewById(R.id.btnTypeCouple);
+
         btnTypeOther = findViewById(R.id.btnTypeOther);
         
         layoutTripDetails = findViewById(R.id.layoutTripDetails);
@@ -73,14 +73,13 @@ public class CreateGroupActivity extends AppCompatActivity {
             } else {
                 layoutTripDetails.setVisibility(View.GONE);
                 if (v.getId() == R.id.btnTypeHome) selectedType = "Home";
-                else if (v.getId() == R.id.btnTypeCouple) selectedType = "Couple";
                 else if (v.getId() == R.id.btnTypeOther) selectedType = "Other";
             }
         };
 
         btnTypeTrip.setOnClickListener(typeClickListener);
         btnTypeHome.setOnClickListener(typeClickListener);
-        btnTypeCouple.setOnClickListener(typeClickListener);
+
         btnTypeOther.setOnClickListener(typeClickListener);
 
         switchTripDates.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -97,8 +96,6 @@ public class CreateGroupActivity extends AppCompatActivity {
                 btnTypeTrip.performClick();
             } else if (intentGroupType.equalsIgnoreCase("Home")) {
                 btnTypeHome.performClick();
-            } else if (intentGroupType.equalsIgnoreCase("Couple")) {
-                btnTypeCouple.performClick();
             } else if (intentGroupType.equalsIgnoreCase("Other")) {
                 btnTypeOther.performClick();
             }
@@ -124,7 +121,7 @@ public class CreateGroupActivity extends AppCompatActivity {
     private void resetTypeButtons() {
         btnTypeTrip.setSelected(false);
         btnTypeHome.setSelected(false);
-        btnTypeCouple.setSelected(false);
+
         btnTypeOther.setSelected(false);
     }
 
@@ -137,6 +134,9 @@ public class CreateGroupActivity extends AppCompatActivity {
         updatedGroups.add(groupName);
         
         prefs.edit().putStringSet("groups", updatedGroups).apply();
+        
+        // Save creator info
+        prefs.edit().putString("creator_" + groupName, "You").apply();
 
         if ("Trip".equals(selectedType) && switchTripDates.isChecked()) {
             String startDate = etStartDate.getText().toString();
@@ -147,19 +147,8 @@ public class CreateGroupActivity extends AppCompatActivity {
         }
         
         // Save activity log
-        saveActivityLog("You created the group \"" + groupName + "\".");
+        ActivityLogger.log(this, "You created the group \"" + groupName + "\".");
     }
 
-    private void saveActivityLog(String message) {
-        SharedPreferences prefs = getSharedPreferences("FinnerPrefs", MODE_PRIVATE);
-        String logsJson = prefs.getString("activity_logs", "[]");
-        try {
-            JSONArray jsonArray = new JSONArray(logsJson);
-            // Add new message at the end
-            jsonArray.put(message);
-            prefs.edit().putString("activity_logs", jsonArray.toString()).apply();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
+
 }

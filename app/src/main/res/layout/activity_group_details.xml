@@ -30,6 +30,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageButton
+        android:id="@+id/btnAddMember"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="Add Member"
+        android:src="@android:drawable/ic_menu_add"
+        app:layout_constraintEnd_toStartOf="@+id/btnSettings"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/tvGroupName"
         android:layout_width="0dp"
@@ -88,27 +100,11 @@
                 android:layout_marginEnd="8dp"
                 android:text="Balances" />
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:text="Totals" />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:text="Whiteboard" />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Export" />
         </LinearLayout>
     </HorizontalScrollView>
 
     <LinearLayout
-        android:id="@+id/layoutEmptyState"
+        android:id="@+id/layoutMembersContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
@@ -118,6 +114,7 @@
         app:layout_constraintTop_toBottomOf="@+id/scrollViewActions">
 
         <TextView
+            android:id="@+id/tvEmptyState"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
@@ -125,11 +122,12 @@
             android:textSize="18sp"
             android:textStyle="bold" />
 
-        <Button
-            android:id="@+id/btnAddMember"
-            android:layout_width="wrap_content"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvMembers"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Add group member" />
+            android:visibility="gone" />
+
     </LinearLayout>
 
     <Button

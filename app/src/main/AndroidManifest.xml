@@ -64,7 +64,30 @@
             android:name=".AddExpenseActivity"
             android:exported="false" />
         <activity
+            android:name=".NonGroupExpensesActivity"
+            android:exported="false"
+            android:label="Non-group expenses" />
+        <activity
             android:name=".SettleUpActivity"
+            android:exported="false" />
+        <activity
+            android:name=".WhiteboardActivity"
+            android:exported="false"
+            android:label="Whiteboard" />
+        <activity
+            android:name=".AddGroupMemberActivity"
+            android:exported="false" />
+        <activity
+            android:name=".EditProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".EmailSettingsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".NotificationsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SecurityActivity"
             android:exported="false" />
     </application>
 
