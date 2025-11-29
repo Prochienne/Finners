@@ -38,10 +38,15 @@ public class FriendDetailsActivity extends AppCompatActivity {
 
         ImageButton btnSettings = findViewById(R.id.btnSettings);
         btnSettings.setOnClickListener(v -> {
-            Intent intent = new Intent(FriendDetailsActivity.this, FriendSettingsActivity.class);
-            intent.putExtra("FRIEND_NAME", friendName);
-            intent.putExtra("FRIEND_ID", friendId);
-            startActivity(intent);
+            String[] options = {"Remove Friend", "Cancel"};
+            new android.app.AlertDialog.Builder(this)
+                .setTitle("Friend Settings")
+                .setItems(options, (dialog, which) -> {
+                    if (which == 0) {
+                        confirmRemoveFriend();
+                    }
+                })
+                .show();
         });
 
         Button btnSettleUp = findViewById(R.id.btnSettleUp);
@@ -65,6 +70,45 @@ public class FriendDetailsActivity extends AppCompatActivity {
             Intent intent = new Intent(FriendDetailsActivity.this, AddExpenseActivity.class);
             startActivity(intent);
         });
+    }
+
+    private void confirmRemoveFriend() {
+        new android.app.AlertDialog.Builder(this)
+            .setTitle("Remove Friend")
+            .setMessage("Are you sure you want to remove " + friendName + " from your friends list?")
+            .setPositiveButton("Remove", (dialog, which) -> {
+                removeFriend();
+            })
+            .setNegativeButton("Cancel", null)
+            .show();
+    }
+
+    private void removeFriend() {
+        FriendsRepository repository = FriendsRepository.getInstance(this);
+        java.util.List<Contact> friends = repository.getFriends();
+        Contact friendToRemove = null;
+        
+        for (Contact friend : friends) {
+            if (friendId != null && friend.getId().equals(friendId)) {
+                friendToRemove = friend;
+                break;
+            } else if (friend.getName().equals(friendName)) {
+                friendToRemove = friend;
+                break;
+            }
+        }
+        
+        if (friendToRemove != null) {
+            repository.removeFriend(friendToRemove);
+            Toast.makeText(this, "Friend removed", Toast.LENGTH_SHORT).show();
+            
+            Intent intent = new Intent(this, HomeActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            startActivity(intent);
+            finish();
+        } else {
+            Toast.makeText(this, "Error: Friend not found", Toast.LENGTH_SHORT).show();
+        }
     }
     
     @Override

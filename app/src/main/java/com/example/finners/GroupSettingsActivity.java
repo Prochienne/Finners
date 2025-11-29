@@ -37,9 +37,7 @@ public class GroupSettingsActivity extends AppCompatActivity {
 
         Button btnAddPeople = findViewById(R.id.btnAddPeople);
         btnAddPeople.setOnClickListener(v -> {
-            android.content.Intent intent = new android.content.Intent(this, AddGroupMemberActivity.class);
-            intent.putExtra("GROUP_NAME", groupName);
-            startActivity(intent);
+            showAddMemberDialog();
         });
 
         Button btnInviteLink = findViewById(R.id.btnInviteLink);
@@ -226,5 +224,101 @@ public class GroupSettingsActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         loadGroupMembers();
+    }
+
+    private void showAddMemberDialog() {
+        FriendsRepository repository = FriendsRepository.getInstance(this);
+        java.util.List<Contact> friendsList = repository.getFriends();
+        
+        android.content.SharedPreferences prefs = getSharedPreferences("FinnerPrefs", MODE_PRIVATE);
+        java.util.Set<String> currentMembers = prefs.getStringSet("members_" + groupName, new java.util.HashSet<>());
+        
+        java.util.List<Contact> availableFriends = new java.util.ArrayList<>();
+        for (Contact friend : friendsList) {
+            if (!currentMembers.contains(friend.getName())) {
+                availableFriends.add(friend);
+            }
+        }
+
+        if (availableFriends.isEmpty()) {
+            Toast.makeText(this, "No new friends to add", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        android.view.View dialogView = android.view.LayoutInflater.from(this).inflate(R.layout.activity_add_group_member, null);
+        
+        androidx.recyclerview.widget.RecyclerView rvFriends = dialogView.findViewById(R.id.rvFriends);
+        TextView tvNoFriends = dialogView.findViewById(R.id.tvNoFriends);
+        ImageButton btnBack = dialogView.findViewById(R.id.btnBack); 
+        if (btnBack != null) btnBack.setVisibility(android.view.View.GONE); 
+
+        rvFriends.setLayoutManager(new androidx.recyclerview.widget.LinearLayoutManager(this));
+        
+        android.app.AlertDialog dialog = new android.app.AlertDialog.Builder(this)
+            .setView(dialogView)
+            .create();
+
+        GroupMemberAdapter adapter = new GroupMemberAdapter(availableFriends, friend -> {
+            addMemberToGroup(friend.getName());
+            dialog.dismiss();
+        });
+        rvFriends.setAdapter(adapter);
+        
+        tvNoFriends.setVisibility(android.view.View.GONE);
+        rvFriends.setVisibility(android.view.View.VISIBLE);
+
+        dialog.show();
+    }
+
+    private void addMemberToGroup(String memberName) {
+        android.content.SharedPreferences prefs = getSharedPreferences("FinnerPrefs", MODE_PRIVATE);
+        java.util.Set<String> members = new java.util.HashSet<>(prefs.getStringSet("members_" + groupName, new java.util.HashSet<>()));
+        members.add(memberName);
+        prefs.edit().putStringSet("members_" + groupName, members).apply();
+        
+        Toast.makeText(this, memberName + " added to group", Toast.LENGTH_SHORT).show();
+        loadGroupMembers(); 
+    }
+
+    private static class GroupMemberAdapter extends androidx.recyclerview.widget.RecyclerView.Adapter<GroupMemberAdapter.ViewHolder> {
+        private java.util.List<Contact> friends;
+        private OnItemClickListener listener;
+
+        public interface OnItemClickListener {
+            void onItemClick(Contact contact);
+        }
+
+        public GroupMemberAdapter(java.util.List<Contact> friends, OnItemClickListener listener) {
+            this.friends = friends;
+            this.listener = listener;
+        }
+
+        @androidx.annotation.NonNull
+        @Override
+        public ViewHolder onCreateViewHolder(@androidx.annotation.NonNull android.view.ViewGroup parent, int viewType) {
+            android.view.View view = android.view.LayoutInflater.from(parent.getContext())
+                    .inflate(android.R.layout.simple_list_item_1, parent, false);
+            return new ViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(@androidx.annotation.NonNull ViewHolder holder, int position) {
+            Contact friend = friends.get(position);
+            holder.textView.setText(friend.getName());
+            holder.itemView.setOnClickListener(v -> listener.onItemClick(friend));
+        }
+
+        @Override
+        public int getItemCount() {
+            return friends.size();
+        }
+
+        static class ViewHolder extends androidx.recyclerview.widget.RecyclerView.ViewHolder {
+            TextView textView;
+            ViewHolder(android.view.View itemView) {
+                super(itemView);
+                textView = itemView.findViewById(android.R.id.text1);
+            }
+        }
     }
 }

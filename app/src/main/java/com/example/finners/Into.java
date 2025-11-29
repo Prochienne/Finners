@@ -20,7 +20,7 @@ public class Into extends AppCompatActivity {
 
         String userName = getIntent().getStringExtra("USER_NAME");
         String userEmail = getIntent().getStringExtra("USER_EMAIL");
-        Adapter adapter = new Adapter(userName, userEmail);
+        IntroAdapter adapter = new IntroAdapter(userName, userEmail);
         viewPager.setAdapter(adapter);
 
         new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {

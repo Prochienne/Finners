@@ -6,17 +6,17 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class Adapter extends RecyclerView.Adapter<Adapter.IntroViewHolder> {
+public class IntroAdapter extends RecyclerView.Adapter<IntroAdapter.IntroViewHolder> {
 
     private String userName;
     private String userEmail;
 
-    public Adapter(String userName, String userEmail) {
+    public IntroAdapter(String userName, String userEmail) {
         this.userName = userName;
         this.userEmail = userEmail;
     }
 
-    public Adapter() {
+    public IntroAdapter() {
         this.userName = "User";
         this.userEmail = "user@example.com";
     }

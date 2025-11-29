@@ -63,22 +63,26 @@ public class AccountFragment extends Fragment {
         });
 
         view.findViewById(R.id.btnEdit).setOnClickListener(v -> {
-            android.content.Intent intent = new android.content.Intent(getActivity(), EditProfileActivity.class);
+            android.content.Intent intent = new android.content.Intent(getActivity(), SettingsActivity.class);
+            intent.putExtra(SettingsActivity.EXTRA_SETTINGS_TYPE, SettingsActivity.TYPE_EDIT_PROFILE);
             startActivity(intent);
         });
 
         view.findViewById(R.id.btnEmailSettings).setOnClickListener(v -> {
-            android.content.Intent intent = new android.content.Intent(getActivity(), EmailSettingsActivity.class);
+            android.content.Intent intent = new android.content.Intent(getActivity(), SettingsActivity.class);
+            intent.putExtra(SettingsActivity.EXTRA_SETTINGS_TYPE, SettingsActivity.TYPE_EMAIL_SETTINGS);
             startActivity(intent);
         });
 
         view.findViewById(R.id.btnNotifications).setOnClickListener(v -> {
-            android.content.Intent intent = new android.content.Intent(getActivity(), NotificationsActivity.class);
+            android.content.Intent intent = new android.content.Intent(getActivity(), SettingsActivity.class);
+            intent.putExtra(SettingsActivity.EXTRA_SETTINGS_TYPE, SettingsActivity.TYPE_NOTIFICATIONS);
             startActivity(intent);
         });
 
         view.findViewById(R.id.btnSecurity).setOnClickListener(v -> {
-            android.content.Intent intent = new android.content.Intent(getActivity(), SecurityActivity.class);
+            android.content.Intent intent = new android.content.Intent(getActivity(), SettingsActivity.class);
+            intent.putExtra(SettingsActivity.EXTRA_SETTINGS_TYPE, SettingsActivity.TYPE_SECURITY);
             startActivity(intent);
         });
 

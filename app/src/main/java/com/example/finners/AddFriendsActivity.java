@@ -50,9 +50,30 @@ public class AddFriendsActivity extends AppCompatActivity {
                     selectedContacts.add(contact);
                 }
             }
-            android.content.Intent intent = new android.content.Intent(AddFriendsActivity.this, ReviewActivity.class);
-            intent.putExtra("selected_contacts", selectedContacts);
-            startActivity(intent);
+            
+            if (selectedContacts.isEmpty()) {
+                Toast.makeText(this, "No contacts selected", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            new android.app.AlertDialog.Builder(this)
+                .setTitle("Add Friends")
+                .setMessage("Add " + selectedContacts.size() + " friends?")
+                .setPositiveButton("Add", (dialog, which) -> {
+                    FriendsRepository repository = FriendsRepository.getInstance(this);
+                    for (Contact contact : selectedContacts) {
+                        repository.addFriend(contact);
+                    }
+                    String message = "You added " + selectedContacts.size() + " new friend" + (selectedContacts.size() > 1 ? "s" : "");
+                    ActivityLogger.log(this, message);
+                    
+                    android.content.Intent intent = new android.content.Intent(this, HomeActivity.class);
+                    intent.addFlags(android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP | android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    startActivity(intent);
+                    finish();
+                })
+                .setNegativeButton("Cancel", null)
+                .show();
         });
 
         rvContacts.setLayoutManager(new LinearLayoutManager(this));
