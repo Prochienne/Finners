@@ -20,7 +20,7 @@
         android:layout_width="217dp"
         android:layout_height="196dp"
         android:fontFamily="sans-serif-condensed-medium"
-        android:text="Welcome to Finners, Ass"
+        android:text="Welcome to Finners"
         android:textSize="48sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -42,15 +42,18 @@
         app:layout_constraintHorizontal_bias="0.349"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.259" />
+        app:layout_constraintVertical_bias="0.281" />
 
     <ImageView
         android:id="@+id/imageView3"
-        android:layout_width="379dp"
-        android:layout_height="528dp"
+        android:layout_width="363dp"
+        android:layout_height="164dp"
+        android:src="@drawable/ab27bc18_8b46_413b_a4d1_837725d9c48d_removalai_preview"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/pic" />
+        app:layout_constraintVertical_bias="0.438"
+        tools:srcCompat="@drawable/ab27bc18_8b46_413b_a4d1_837725d9c48d_removalai_preview" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

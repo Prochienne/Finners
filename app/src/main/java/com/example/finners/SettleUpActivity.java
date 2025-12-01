@@ -10,6 +10,10 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import org.json.JSONArray;
 import org.json.JSONException;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SettleUpActivity extends AppCompatActivity {
 
@@ -17,6 +21,7 @@ public class SettleUpActivity extends AppCompatActivity {
     private EditText etAmount;
     private String friendId;
     private String friendName;
+    private String groupName;
     private double currentBalance;
 
     @Override
@@ -31,7 +36,9 @@ public class SettleUpActivity extends AppCompatActivity {
         Button btnSave = findViewById(R.id.btnSave);
 
         friendId = getIntent().getStringExtra("FRIEND_ID");
+        friendId = getIntent().getStringExtra("FRIEND_ID");
         friendName = getIntent().getStringExtra("FRIEND_NAME");
+        groupName = getIntent().getStringExtra("GROUP_NAME");
 
         if (friendId == null) {
             // No friend passed, allow selection
@@ -58,15 +65,35 @@ public class SettleUpActivity extends AppCompatActivity {
             return;
         }
 
-        String[] friendNames = new String[friends.size()];
-        for (int i = 0; i < friends.size(); i++) {
-            friendNames[i] = friends.get(i).getName();
+        List<Contact> filteredFriends = new ArrayList<>();
+        
+        if (groupName != null) {
+            SharedPreferences prefs = getSharedPreferences("FinnerPrefs", MODE_PRIVATE);
+            Set<String> groupMembers = prefs.getStringSet("members_" + groupName, new HashSet<>());
+            
+            for (Contact friend : friends) {
+                if (groupMembers.contains(friend.getName())) {
+                    filteredFriends.add(friend);
+                }
+            }
+        } else {
+            filteredFriends.addAll(friends);
+        }
+
+        if (filteredFriends.isEmpty()) {
+            Toast.makeText(this, "No friends to settle with", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String[] friendNames = new String[filteredFriends.size()];
+        for (int i = 0; i < filteredFriends.size(); i++) {
+            friendNames[i] = filteredFriends.get(i).getName();
         }
 
         new androidx.appcompat.app.AlertDialog.Builder(this)
                 .setTitle("Select Friend")
                 .setItems(friendNames, (dialog, which) -> {
-                    Contact selectedFriend = friends.get(which);
+                    Contact selectedFriend = filteredFriends.get(which);
                     friendId = selectedFriend.getId();
                     friendName = selectedFriend.getName();
                     tvSettleMessage.setText("Settle up with " + friendName);

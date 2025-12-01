@@ -84,6 +84,7 @@ public class GroupDetailsActivity extends AppCompatActivity {
         Button btnSettleUp = findViewById(R.id.btnSettleUp);
         btnSettleUp.setOnClickListener(v -> {
             Intent intent = new Intent(GroupDetailsActivity.this, SettleUpActivity.class);
+            intent.putExtra("GROUP_NAME", groupName);
             startActivity(intent);
         });
 
@@ -203,10 +204,13 @@ public class GroupDetailsActivity extends AppCompatActivity {
         List<Contact> friends = repo.getFriends();
         StringBuilder sb = new StringBuilder();
         for (Contact friend : friends) {
-            double balance = repo.getBalance(friend.getId());
-            if (balance != 0) {
-                if (balance > 0) sb.append(friend.getName()).append(" owes you $").append(String.format("%.2f", balance)).append("\n");
-                else sb.append("You owe ").append(friend.getName()).append(" $").append(String.format("%.2f", -balance)).append("\n");
+            // Only show balances for members of this group
+            if (membersList.contains(friend.getName())) {
+                double balance = repo.getBalance(friend.getId());
+                if (balance != 0) {
+                    if (balance > 0) sb.append(friend.getName()).append(" owes you $").append(String.format("%.2f", balance)).append("\n");
+                    else sb.append("You owe ").append(friend.getName()).append(" $").append(String.format("%.2f", -balance)).append("\n");
+                }
             }
         }
         if (sb.length() == 0) sb.append("All settled up!");

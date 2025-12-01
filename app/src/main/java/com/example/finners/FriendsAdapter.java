@@ -31,11 +31,14 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendVi
         FriendsRepository repository = FriendsRepository.getInstance(holder.itemView.getContext());
         double balance = repository.getBalance(friend.getId());
         
-        if (balance > 0) {
-            holder.status.setText("owes you $" + String.format("%.2f", balance));
+        android.content.SharedPreferences prefs = holder.itemView.getContext().getSharedPreferences("FinnerPrefs", android.content.Context.MODE_PRIVATE);
+        String symbol = prefs.getString("user_currency_symbol", "$");
+
+        if (balance >= 0.01) {
+            holder.status.setText("owes you " + symbol + String.format("%.2f", balance));
             holder.status.setTextColor(android.graphics.Color.parseColor("#4CAF50")); // Green
-        } else if (balance < 0) {
-            holder.status.setText("you owe $" + String.format("%.2f", Math.abs(balance)));
+        } else if (balance <= -0.01) {
+            holder.status.setText("you owe " + symbol + String.format("%.2f", Math.abs(balance)));
             holder.status.setTextColor(android.graphics.Color.parseColor("#F44336")); // Red
         } else {
             holder.status.setText("settled up");

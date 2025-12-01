@@ -121,14 +121,22 @@ public class AddFriendsActivity extends AppCompatActivity {
         if (cursor != null) {
             Set<String> seenContactIds = new HashSet<>();
             while (cursor.moveToNext()) {
-                String id = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID));
+                int idIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID);
+                int nameIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
+                int numberIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
+
+                if (idIndex == -1 || nameIndex == -1 || numberIndex == -1) {
+                    continue;
+                }
+
+                String id = cursor.getString(idIndex);
                 if (seenContactIds.contains(id)) {
                     continue;
                 }
                 seenContactIds.add(id);
                 
-                String name = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
-                String phoneNumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                String name = cursor.getString(nameIndex);
+                String phoneNumber = cursor.getString(numberIndex);
                 contactList.add(new Contact(id, name, phoneNumber));
             }
             cursor.close();

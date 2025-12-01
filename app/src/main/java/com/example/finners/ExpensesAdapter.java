@@ -43,10 +43,11 @@ public class ExpensesAdapter extends RecyclerView.Adapter<ExpensesAdapter.ViewHo
             holder.tvDescription.setText(description);
             
             String symbol = "$";
-            if (currency.equals("EUR")) symbol = "€";
-            else if (currency.equals("GBP")) symbol = "£";
-            else if (currency.equals("INR")) symbol = "₹";
-            else if (currency.equals("JPY")) symbol = "¥";
+            try {
+                symbol = java.util.Currency.getInstance(currency).getSymbol();
+            } catch (Exception e) {
+                // Fallback to default
+            }
             
             holder.tvAmount.setText(String.format(Locale.getDefault(), "%s%.2f", symbol, amount));
             

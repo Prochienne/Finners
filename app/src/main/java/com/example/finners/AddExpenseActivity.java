@@ -38,6 +38,8 @@ import java.util.Set;
 import java.util.UUID;
 
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 
 public class AddExpenseActivity extends AppCompatActivity {
 
@@ -45,6 +47,7 @@ public class AddExpenseActivity extends AppCompatActivity {
 
     private EditText etSearch, etDescription, etAmount;
     private RecyclerView rvSearchResults;
+    private ChipGroup cgSelectedParticipants;
     private Button btnPayer, btnCurrency, btnSplit, btnDate;
     private ImageButton btnBillIcon, btnNote, btnReceipt;
     private List<String> selectedNames = new ArrayList<>();
@@ -58,6 +61,7 @@ public class AddExpenseActivity extends AppCompatActivity {
     private String receiptUri = "";
     private String selectedCategory = "General";
     private String selectedCurrency = "USD";
+    private String selectedCurrencySymbol = "$"; // New field
     private String recurringInterval = "Never";
     private ImageButton btnRecurring;
     
@@ -89,8 +93,18 @@ public class AddExpenseActivity extends AppCompatActivity {
         etDescription = findViewById(R.id.etDescription);
         etAmount = findViewById(R.id.etAmount);
         rvSearchResults = findViewById(R.id.rvSearchResults);
+        cgSelectedParticipants = findViewById(R.id.cgSelectedParticipants);
         btnPayer = findViewById(R.id.btnPayer);
         btnCurrency = findViewById(R.id.btnCurrency);
+        
+        // Load saved currency
+        SharedPreferences prefs = getSharedPreferences("FinnerPrefs", MODE_PRIVATE);
+        String savedCode = prefs.getString("user_currency_code", "USD");
+        String savedSymbol = prefs.getString("user_currency_symbol", "$");
+        selectedCurrency = savedCode;
+        selectedCurrencySymbol = savedSymbol;
+        btnCurrency.setText(savedSymbol);
+        
         btnSplit = findViewById(R.id.btnSplit);
         
         btnBillIcon = findViewById(R.id.btnBillIcon);
@@ -141,60 +155,70 @@ public class AddExpenseActivity extends AppCompatActivity {
         updateDateButton();
     }
 
-    private void loadSearchableItems() {
-        allSearchableItems.clear();
-        FriendsRepository repository = FriendsRepository.getInstance(this);
-        List<Contact> friends = repository.getFriends();
-        for (Contact friend : friends) {
-            allSearchableItems.add(friend.getName());
-        }
-    }
-
-    private void filterSearch(String text) {
-        List<String> filteredList = new ArrayList<>();
-        for (String item : allSearchableItems) {
-            if (item.toLowerCase().contains(text.toLowerCase())) {
-                filteredList.add(item);
-            }
-        }
-        if (searchAdapter != null) {
-            searchAdapter.updateList(filteredList);
-        }
-    }
-
     private void onItemSelected(String item) {
         if (!selectedNames.contains(item)) {
             selectedNames.add(item);
-            updateParticipantsDisplay();
+            addParticipantChip(item);
+        } else {
+            Toast.makeText(this, item + " is already added", Toast.LENGTH_SHORT).show();
         }
         etSearch.setText("");
         rvSearchResults.setVisibility(View.GONE);
+        android.view.inputmethod.InputMethodManager imm = (android.view.inputmethod.InputMethodManager) getSystemService(android.content.Context.INPUT_METHOD_SERVICE);
+        if (imm != null) {
+            imm.hideSoftInputFromWindow(etSearch.getWindowToken(), 0);
+        }
     }
 
-    private void updateParticipantsDisplay() {
-        TextView tvWithYouAnd = findViewById(R.id.tvWithYouAnd);
-        StringBuilder sb = new StringBuilder("With you and: ");
-        for (String name : selectedNames) {
-            sb.append(name).append(", ");
+    private void addParticipantChip(String name) {
+        Chip chip = new Chip(this);
+        chip.setText(name);
+        chip.setCloseIconVisible(true);
+        chip.setOnCloseIconClickListener(v -> {
+            selectedNames.remove(name);
+            cgSelectedParticipants.removeView(chip);
+        });
+        cgSelectedParticipants.addView(chip);
+    }
+
+    private void loadSearchableItems() {
+        allSearchableItems.clear();
+        FriendsRepository repository = FriendsRepository.getInstance(this);
+        if (repository != null) {
+            List<Contact> friends = repository.getFriends();
+            for (Contact friend : friends) {
+                allSearchableItems.add(friend.getName());
+            }
         }
-        if (!selectedNames.isEmpty()) {
-            sb.setLength(sb.length() - 2);
+    }
+
+    private void filterSearch(String query) {
+        List<String> filtered = new ArrayList<>();
+        if (query.isEmpty()) {
+            filtered.addAll(allSearchableItems);
+        } else {
+            String lowerQuery = query.toLowerCase();
+            for (String item : allSearchableItems) {
+                if (item.toLowerCase().contains(lowerQuery)) {
+                    filtered.add(item);
+                }
+            }
         }
-        tvWithYouAnd.setText(sb.toString());
+        searchAdapter.updateList(filtered);
     }
 
     private void showPayerSelectionDialog() {
-        List<String> payers = new ArrayList<>();
-        payers.add("You");
-        payers.addAll(selectedNames);
+        List<String> participants = new ArrayList<>();
+        participants.add("You");
+        participants.addAll(selectedNames);
         
-        String[] payerArray = payers.toArray(new String[0]);
+        String[] payers = participants.toArray(new String[0]);
         
         new AlertDialog.Builder(this)
             .setTitle("Select Payer")
-            .setItems(payerArray, (dialog, which) -> {
-                currentPayer = payerArray[which];
-                btnPayer.setText(currentPayer);
+            .setItems(payers, (dialog, which) -> {
+                currentPayer = payers[which];
+                btnPayer.setText("Paid by " + currentPayer);
             })
             .show();
     }
@@ -202,27 +226,27 @@ public class AddExpenseActivity extends AppCompatActivity {
     private void showSplitSelectionDialog() {
         String[] splitTypes = {"Equally", "Unequally", "Percentages", "Shares"};
         new AlertDialog.Builder(this)
-            .setTitle("Select Split Type")
+            .setTitle("How to split?")
             .setItems(splitTypes, (dialog, which) -> {
                 switch (which) {
-                    case 0: 
-                        currentSplitType = SplitType.EQUALLY; 
-                        btnSplit.setText("equally"); 
+                    case 0:
+                        currentSplitType = SplitType.EQUALLY;
+                        btnSplit.setText("Split Equally");
                         break;
-                    case 1: 
-                        currentSplitType = SplitType.UNEQUALLY; 
-                        btnSplit.setText("unequally"); 
-                        showCustomSplitDialog(); 
+                    case 1:
+                        currentSplitType = SplitType.UNEQUALLY;
+                        btnSplit.setText("Split Unequally");
+                        showCustomSplitDialog();
                         break;
-                    case 2: 
-                        currentSplitType = SplitType.PERCENTAGES; 
-                        btnSplit.setText("percentages"); 
-                        showCustomSplitDialog(); 
+                    case 2:
+                        currentSplitType = SplitType.PERCENTAGES;
+                        btnSplit.setText("Split by %");
+                        showCustomSplitDialog();
                         break;
-                    case 3: 
-                        currentSplitType = SplitType.SHARES; 
-                        btnSplit.setText("shares"); 
-                        showCustomSplitDialog(); 
+                    case 3:
+                        currentSplitType = SplitType.SHARES;
+                        btnSplit.setText("Split by Shares");
+                        showCustomSplitDialog();
                         break;
                 }
             })
@@ -261,7 +285,7 @@ public class AddExpenseActivity extends AppCompatActivity {
             }
         }
 
-        SplitAdjustmentAdapter adapter = new SplitAdjustmentAdapter(participants, splitWeights, currentSplitType, new SplitAdjustmentAdapter.OnSplitChangeListener() {
+        SplitAdjustmentAdapter adapter = new SplitAdjustmentAdapter(participants, splitWeights, currentSplitType, selectedCurrencySymbol, new SplitAdjustmentAdapter.OnSplitChangeListener() {
             @Override
             public void onSplitChanged() {
                 updateSplitSummary(tvTotalSummary, tvRemaining, participants);
@@ -286,16 +310,10 @@ public class AddExpenseActivity extends AppCompatActivity {
                 if (validateSplit(participants)) {
                     dialog.dismiss();
                 } else {
-                    // Prevent dismiss if invalid? AlertDialog auto-dismisses on button click.
-                    // We might need to override the OnClickListener to prevent dismiss.
-                    // For now, let's just toast and keep the values (user has to reopen to fix if we don't block).
-                    // Better approach: Show the dialog, get the button, and set onclick listener.
                     Toast.makeText(AddExpenseActivity.this, "Split saved", Toast.LENGTH_SHORT).show();
                 }
             })
             .setNegativeButton("Cancel", (dialog, which) -> {
-                // Revert to equal split or previous state? 
-                // For now, just cancel.
             })
             .show();
     }
@@ -313,9 +331,9 @@ public class AddExpenseActivity extends AppCompatActivity {
             } catch (NumberFormatException e) {
                 expenseAmount = 0;
             }
-            tvTotal.setText(String.format(Locale.getDefault(), "Total: $%.2f / $%.2f", total, expenseAmount));
+            tvTotal.setText(String.format(Locale.getDefault(), "Total: %s%.2f / %s%.2f", selectedCurrencySymbol, total, selectedCurrencySymbol, expenseAmount));
             double remaining = expenseAmount - total;
-            tvRemaining.setText(String.format(Locale.getDefault(), "Remaining: $%.2f", remaining));
+            tvRemaining.setText(String.format(Locale.getDefault(), "Remaining: %s%.2f", selectedCurrencySymbol, remaining));
             tvRemaining.setTextColor(Math.abs(remaining) < 0.01 ? 0xFF00AA00 : 0xFFFF0000); // Green if balanced, Red if not
             
         } else if (currentSplitType == SplitType.PERCENTAGES) {
@@ -335,24 +353,27 @@ public class AddExpenseActivity extends AppCompatActivity {
         for (String p : participants) {
             total += splitWeights.getOrDefault(p, 0.0);
         }
-        
+
         if (currentSplitType == SplitType.UNEQUALLY) {
-             double expenseAmount = 0;
+            double expenseAmount = 0;
             try {
                 expenseAmount = Double.parseDouble(etAmount.getText().toString());
             } catch (NumberFormatException e) {
-                expenseAmount = 0;
+                Toast.makeText(this, "Invalid expense amount", Toast.LENGTH_SHORT).show();
+                return false;
             }
+            
             if (Math.abs(expenseAmount - total) > 0.01) {
-                Toast.makeText(this, "Total amount must match expense amount", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Total split amount must match expense amount", Toast.LENGTH_SHORT).show();
                 return false;
             }
         } else if (currentSplitType == SplitType.PERCENTAGES) {
             if (Math.abs(100.0 - total) > 0.1) {
-                Toast.makeText(this, "Total percentage must be 100%", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Percentages must add up to 100%", Toast.LENGTH_SHORT).show();
                 return false;
             }
         }
+        
         return true;
     }
 
@@ -360,16 +381,18 @@ public class AddExpenseActivity extends AppCompatActivity {
         private List<String> participants;
         private Map<String, Double> weights;
         private SplitType type;
+        private String currencySymbol;
         private OnSplitChangeListener listener;
 
         public interface OnSplitChangeListener {
             void onSplitChanged();
         }
 
-        public SplitAdjustmentAdapter(List<String> participants, Map<String, Double> weights, SplitType type, OnSplitChangeListener listener) {
+        public SplitAdjustmentAdapter(List<String> participants, Map<String, Double> weights, SplitType type, String currencySymbol, OnSplitChangeListener listener) {
             this.participants = participants;
             this.weights = weights;
             this.type = type;
+            this.currencySymbol = currencySymbol;
             this.listener = listener;
         }
 
@@ -397,7 +420,7 @@ public class AddExpenseActivity extends AppCompatActivity {
                 holder.etAmount.setText(String.format(Locale.getDefault(), "%.2f", val));
             }
 
-            if (type == SplitType.UNEQUALLY) holder.tvUnit.setText("$");
+            if (type == SplitType.UNEQUALLY) holder.tvUnit.setText(currencySymbol);
             else if (type == SplitType.PERCENTAGES) holder.tvUnit.setText("%");
             else if (type == SplitType.SHARES) holder.tvUnit.setText("shares");
             
@@ -477,17 +500,17 @@ public class AddExpenseActivity extends AppCompatActivity {
     }
 
     private void showCurrencySelectionDialog() {
-        String[] currencies = {"USD ($)", "EUR (€)", "GBP (£)", "INR (₹)", "JPY (¥)", "CAD ($)", "AUD ($)"};
-        String[] codes = {"USD", "EUR", "GBP", "INR", "JPY", "CAD", "AUD"};
-        String[] symbols = {"$", "€", "£", "₹", "¥", "$", "$"};
-        
-        new AlertDialog.Builder(this)
-                .setTitle("Select Currency")
-                .setItems(currencies, (dialog, which) -> {
-                    selectedCurrency = codes[which];
-                    btnCurrency.setText(symbols[which]);
-                })
-                .show();
+        com.mynameismidori.currencypicker.CurrencyPicker picker = com.mynameismidori.currencypicker.CurrencyPicker.newInstance("Select Currency");
+        picker.setListener(new com.mynameismidori.currencypicker.CurrencyPickerListener() {
+            @Override
+            public void onSelectCurrency(String name, String code, String symbol, int flagDrawableResID) {
+                selectedCurrency = code;
+                selectedCurrencySymbol = symbol;
+                btnCurrency.setText(symbol);
+                picker.dismiss();
+            }
+        });
+        picker.show(getSupportFragmentManager(), "CURRENCY_PICKER");
     }
 
     private void saveExpense() {
@@ -546,24 +569,36 @@ public class AddExpenseActivity extends AppCompatActivity {
                 }
             }
 
-            double youPaid = currentPayer.equals("You") ? amount : 0; 
+            double youPaid = (currentPayer != null && currentPayer.equals("You")) ? amount : 0; 
             double youOwe = finalAmounts.getOrDefault("You", 0.0);
             double youGetBack = youPaid - youOwe;
             
             // Update balances
             FriendsRepository repository = FriendsRepository.getInstance(this);
+            SharedPreferences prefs = getSharedPreferences("FinnerPrefs", MODE_PRIVATE);
+            String defaultCurrency = prefs.getString("user_currency_code", "USD");
+            
             if (repository != null) {
                 List<Contact> friends = repository.getFriends();
                 
                 if (friends != null && selectedNames != null) {
                     for (String name : selectedNames) {
+                        if (name == null) continue;
                         for (Contact friend : friends) {
                             if (friend != null && friend.getName() != null && friend.getName().equals(name)) {
                                 double friendOwes = finalAmounts.getOrDefault(name, 0.0);
-                                if (currentPayer.equals("You")) {
+                                double youOweAmount = youOwe;
+                                
+                                // Convert amounts if expense currency differs from default
+                                if (!selectedCurrency.equals(defaultCurrency)) {
+                                    friendOwes = CurrencyConverter.convert(friendOwes, selectedCurrency, defaultCurrency);
+                                    youOweAmount = CurrencyConverter.convert(youOwe, selectedCurrency, defaultCurrency);
+                                }
+                                
+                                if (currentPayer != null && currentPayer.equals("You")) {
                                     repository.updateBalance(friend.getId(), friendOwes);
-                                } else if (currentPayer.equals(name)) {
-                                    repository.updateBalance(friend.getId(), -youOwe); 
+                                } else if (currentPayer != null && currentPayer.equals(name)) {
+                                    repository.updateBalance(friend.getId(), -youOweAmount); 
                                 }
                                 break;
                             }
@@ -587,10 +622,14 @@ public class AddExpenseActivity extends AppCompatActivity {
             
             Toast.makeText(this, "Expense added!", Toast.LENGTH_SHORT).show();
             finish();
-        } catch (Exception e) {
+        } catch (Throwable e) {
             e.printStackTrace();
-            ActivityLogger.log(this, "Error adding expense", e.getMessage());
-            Toast.makeText(this, "Error adding expense: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            try {
+                ActivityLogger.log(this, "Error adding expense", e.getMessage());
+                Toast.makeText(this, "Error adding expense: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            } catch (Exception ex) {
+                // Ignore secondary errors
+            }
         }
     }
 

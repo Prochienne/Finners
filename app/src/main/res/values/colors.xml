@@ -25,4 +25,5 @@
     <!-- UI Elements -->
     <color name="colorAvatarBa45ckground">#EEEEEE</color>
     <color name="colorDivider">#CCCCCC</color>
+    <color name="ccp_text_color">@color/black</color>
 </resources>

@@ -25,4 +25,5 @@
     <!-- UI Elements -->
     <color name="colorAvatarBackground">#333333</color>
     <color name="colorDivider">#333333</color>
+    <color name="ccp_text_color">@color/white</color>
 </resources>

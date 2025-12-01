@@ -45,6 +45,7 @@
             app:ccp_defaultNameCode="AE"
             app:ccp_showNameCode="false"
             app:ccp_textSize="16sp"
+            app:ccp_contentColor="@color/ccp_text_color"
             tools:layout_editor_absoluteX="-4dp"
             tools:layout_editor_absoluteY="727dp" />
 
@@ -212,7 +213,7 @@
         android:layout_height="wrap_content"
 
         android:layout_marginTop="28dp"
-        android:text="By signing up you consent your voice to be used in AI"
+        android:text="By signing up you agree to the terms and conditions."
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="parent"

@@ -123,13 +123,16 @@ public class FriendDetailsActivity extends AppCompatActivity {
         FriendsRepository repository = FriendsRepository.getInstance(this);
         double balance = repository.getBalance(friendId);
         
+        android.content.SharedPreferences prefs = getSharedPreferences("FinnerPrefs", MODE_PRIVATE);
+        String symbol = prefs.getString("user_currency_symbol", "$");
+        
         TextView tvNoExpensesSmall = findViewById(R.id.tvNoExpensesSmall);
         
         if (balance > 0) {
-            tvNoExpensesSmall.setText("owes you $" + String.format("%.2f", balance));
+            tvNoExpensesSmall.setText("owes you " + symbol + String.format("%.2f", balance));
             tvNoExpensesSmall.setTextColor(android.graphics.Color.parseColor("#4CAF50")); // Green
         } else if (balance < 0) {
-            tvNoExpensesSmall.setText("you owe $" + String.format("%.2f", Math.abs(balance)));
+            tvNoExpensesSmall.setText("you owe " + symbol + String.format("%.2f", Math.abs(balance)));
             tvNoExpensesSmall.setTextColor(android.graphics.Color.parseColor("#F44336")); // Red
         } else {
             tvNoExpensesSmall.setText("settled up");

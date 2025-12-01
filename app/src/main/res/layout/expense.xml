@@ -18,13 +18,14 @@
 
     <ImageView
         android:id="@+id/imageView4"
-        android:layout_width="295dp"
-        android:layout_height="176dp"
+        android:layout_width="457dp"
+        android:layout_height="342dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/imageView"
-        app:srcCompat="@drawable/pic_1" />
+        app:layout_constraintVertical_bias="0.499"
+        app:srcCompat="@drawable/whatsapp_image_2025_11_30_at_20_09_02" />
 
     <TextView
         android:id="@+id/textView6"
@@ -52,5 +53,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.13" />
+        app:layout_constraintVertical_bias="0.15" />
 </androidx.constraintlayout.widget.ConstraintLayout>

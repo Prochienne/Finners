@@ -47,21 +47,10 @@ public class Signup extends AppCompatActivity {
         EditText pass = findViewById(R.id.pass);
         View password = findViewById(R.id.password);
         View emails = findViewById(R.id.emails);
-        View box = findViewById(R.id.box);
         TextView welcome = findViewById(R.id.welcome);
         TextView create = findViewById(R.id.create);
         TextView currencyText = findViewById(R.id.tvCurrency);
-
-        CurrencyPicker picker = CurrencyPicker.newInstance("Select Currency");
-        picker.setListener(new CurrencyPickerListener() {
-            @Override
-            public void onSelectCurrency(String name, String code, String symbol, int flagDrawableResID) {
-                currencyText.setText("I use " + code + " (" + symbol + ") as my currency. Change »");
-                picker.dismiss();
-            }
-        });
-
-        currencyText.setOnClickListener(v -> picker.show(getSupportFragmentManager(), "CURRENCY_PICKER"));
+        View box = findViewById(R.id.box);
 
         name.addTextChangedListener(new TextWatcher() {
             @Override
@@ -88,6 +77,21 @@ public class Signup extends AppCompatActivity {
             public void afterTextChanged(Editable s) {}
         });
 
+        currencyText.setOnClickListener(v -> {
+            CurrencyPicker picker = CurrencyPicker.newInstance("Select Currency");
+            picker.setListener((name1, code, symbol, flagDrawableResID) -> {
+                currencyText.setText("I use " + code + " as my currency. Change »");
+                
+                // Save to SharedPreferences
+                getSharedPreferences("FinnerPrefs", MODE_PRIVATE)
+                        .edit()
+                        .putString("user_currency_code", code)
+                        .putString("user_currency_symbol", symbol)
+                        .apply();
+            });
+            picker.show(getSupportFragmentManager(), "CURRENCY_PICKER");
+        });
+
         done.setOnClickListener(v -> {
             String emailText = email.getText().toString().trim();
             String passwordText = pass.getText().toString().trim();
@@ -105,8 +109,9 @@ public class Signup extends AppCompatActivity {
                 return;
             }
 
-            // Phone validation: exactly 9 digits
-            if (phoneText.length() != 9 || !phoneText.matches("\\d+")) {
+            // Phone validation: exactly 9 digits (ignoring spaces)
+            String cleanPhone = phoneText.replace(" ", "");
+            if (cleanPhone.length() != 9 || !cleanPhone.matches("\\d+")) {
                 Toast.makeText(Signup.this, "Enter correct phone number", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -126,6 +131,12 @@ public class Signup extends AppCompatActivity {
                                         .build();
                                 user.updateProfile(profileUpdates);
                             }
+                            
+                            // Save name to SharedPreferences as well
+                            getSharedPreferences("FinnerPrefs", MODE_PRIVATE)
+                                    .edit()
+                                    .putString("user_name", nameText)
+                                    .apply();
 
                             Intent i = new Intent(Signup.this, Into.class);
                             i.putExtra("USER_NAME", nameText);

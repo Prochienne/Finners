@@ -52,39 +52,46 @@ public class ActivityFragment extends Fragment {
     }
 
     private void loadActivityLogs() {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("activity_logs")
-            .orderBy("timestamp", Query.Direction.DESCENDING)
-            .addSnapshotListener((snapshots, e) -> {
-                if (e != null) {
-                    return;
-                }
+        try {
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            db.collection("activity_logs")
+                .orderBy("timestamp", Query.Direction.DESCENDING)
+                .addSnapshotListener((snapshots, e) -> {
+                    if (e != null) {
+                        return;
+                    }
+                    if (!isAdded() || getContext() == null) {
+                        return;
+                    }
 
-                List<String> logs = new ArrayList<>();
-                if (snapshots != null) {
-                    for (QueryDocumentSnapshot doc : snapshots) {
-                        String message = doc.getString("message");
-                        String subMessage = doc.getString("subMessage");
-                        if (message != null) {
-                            if (subMessage != null && !subMessage.isEmpty()) {
-                                logs.add(message + "|" + subMessage);
-                            } else {
-                                logs.add(message);
+                    List<String> logs = new ArrayList<>();
+                    if (snapshots != null) {
+                        for (QueryDocumentSnapshot doc : snapshots) {
+                            String message = doc.getString("message");
+                            String subMessage = doc.getString("subMessage");
+                            if (message != null) {
+                                if (subMessage != null && !subMessage.isEmpty()) {
+                                    logs.add(message + "|" + subMessage);
+                                } else {
+                                    logs.add(message);
+                                }
                             }
                         }
                     }
-                }
 
-                if (logs.isEmpty()) {
-                    tvActivityEmpty.setVisibility(View.VISIBLE);
-                    lvActivityLog.setVisibility(View.GONE);
-                } else {
-                    tvActivityEmpty.setVisibility(View.GONE);
-                    lvActivityLog.setVisibility(View.VISIBLE);
-                    ActivityLogAdapter adapter = new ActivityLogAdapter(requireContext(), logs);
-                    lvActivityLog.setAdapter(adapter);
-                }
-            });
+                    if (logs.isEmpty()) {
+                        tvActivityEmpty.setVisibility(View.VISIBLE);
+                        lvActivityLog.setVisibility(View.GONE);
+                    } else {
+                        tvActivityEmpty.setVisibility(View.GONE);
+                        lvActivityLog.setVisibility(View.VISIBLE);
+                        ActivityLogAdapter adapter = new ActivityLogAdapter(requireContext(), logs);
+                        lvActivityLog.setAdapter(adapter);
+                    }
+                });
+        } catch (Exception e) {
+            // Firestore not available
+        }
     }
 
     private static class ActivityLogAdapter extends ArrayAdapter<String> {
